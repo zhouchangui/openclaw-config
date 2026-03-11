@@ -7,6 +7,7 @@ _Learn about the person you're helping. Update this as you go._
 - **Pronouns:** _(optional)_
 - **Timezone:**
 - **Notes:**
+  - Feishu investment 私聊 openid: `ou_f4000dee777aef171c1d96791c1656d0`
 
 ## Context
 

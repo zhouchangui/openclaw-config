@@ -4,6 +4,7 @@
 - **Call**: 宁远 / 周总
 - **Role**: 盯钉喵项目主导
 - **Timezone**: Asia/Shanghai
+- **Feishu OpenID**: ou_992dc10ef5a216445337f63c0a638b03
 
 ## 工作职责
 

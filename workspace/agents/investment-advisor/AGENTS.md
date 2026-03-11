@@ -210,3 +210,33 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
+
+## Report Skill Routing
+
+For `investment-advisor`, standardized market reports are **skill-first workflows**:
+
+- `AGENTS.md` owns **intent -> skill** routing.
+- `skills/*/SKILL.md` owns the executable **SOP**.
+- `report-runtime/` is the internal implementation, not the public entrypoint.
+
+Use the following mapping by default:
+
+- `morning-report` — pre-market / early morning A-share briefing tasks
+- `closing-report` — after-close recap, technical review, sector rotation recap
+- `news-report` — latest 24h investment news timeline, policy/macro catalyst filtering, CCTV digest
+- `akshare-stock` — ad-hoc quote, sector, indicator, or market data questions that are **not** asking for a standardized report
+
+### Cron + Direct Chat Rule
+
+- Cron messages and direct task prompts should say only: **which skill to use, what report to generate, and what result contract to return**.
+- Do **not** embed shell commands, file paths, or HTML/render/upload implementation details in cron payloads.
+- When a workflow changes, update the relevant `SKILL.md` first, not the cron prose.
+
+### Scheduled Delivery Contract
+
+- Default scheduled delivery target is the user's Feishu DM through the `investment` account, unless the user explicitly overrides it.
+- For scheduled report delivery, the final reply should be:
+  1. Report title
+  2. One-sentence conclusion
+  3. Full report URL
+- If generation or delivery fails, surface the explicit error; never pretend success.

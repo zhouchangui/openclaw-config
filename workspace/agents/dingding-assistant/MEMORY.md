@@ -5,56 +5,42 @@
 ### 盯钉喵生态
 - **Platform**: NestJS 后端 + React 前端 + RabbitMQ 调度 + Keycloak 认证
 - **Agents**: 14+ 个功能 Agent（内容创作、图片生成、RSS 摘要等）
-- **Content**: 素材库 + 知识库 + 运营数据
+- **生产服务器**: jxhs（SSH 别名），路径 `/opt/dingding-platform`
 
 ### 工作模式
-- 你：需求提出者 + 最终决策者
-- 我：Copilot（设计 + 编码 + 测试 + 文档）
-- 流程：需求 → 设计 → 开发 → 测试 → PR → 合并
+- 用户：需求提出者 + 最终决策者
+- 我：分析、规划、协调（编码委托给 Copilot CLI）
+- 流程：需求 → 设计 → `copilot -p` 开发 → 测试 → PR → 等用户合并
 
 ---
 
-## 📋 当前状态（2026-03-10）
+## 📋 项目状态（最后更新：2026-03-11）
 
-### Platform
-- 已完成的功能：[待补充]
-- 进行中的任务：[待补充]
-- 已知的 bug：[待补充]
-- 计划功能：[待补充]
+### Platform（dingding-platform）
+- **已知问题**：磁盘使用率 95%（54GB/59GB），需清理 Docker 镜像和卷
+- **容器异常**：gaccode 容器不健康；tddatasvr 持续重启
+- **安全待办**：防火墙未启用，Docker 端口暴露 0.0.0.0
 
-### Agents
+### Agents（dingding-agents）
 - 已有 Agent 数量：14 个
-- 最近新增：[待补充]
-- 进行中开发：[待补充]
+- 进行中需求：App 掘金监控机器人（Fast-Follower Bot），P1，status: new
+
+### 基础设施
+- Feishu 频道：✅ 正常（cli_a93a959ece799bef）
+- investment-advisor：✅ 已修复（2026-03-11）
+- ops-health 报告：`~/workroot/dingding-platform/.agents/skills/ops-health/reports/`
 
 ---
 
 ## 📊 任务日志
 
-### 2026-03-10
-- ✅ 完成多 Agent 架构设计
-- ✅ 创建盯钉喵开发助理工作空间
-- ⏳ 等待首个开发需求
-
 ### 2026-03-11
-- 🆕 新增智能体需求：App 掘金监控机器人（Fast-Follower Bot）
-- ✅ 已确认首版先聚焦 App Store，主要市场地区覆盖，工具类优先
-- ✅ 已确认首版输出以稳定 Markdown 模板为核心，执行时需创建临时目录、先写实现计划、原始数据优先落文件、必要时使用子智能体分段处理以避免上下文爆炸
+- ✅ 修复 Feishu 插件加载失败（devDependencies workspace 引用问题）
+- ✅ 修复 investment-advisor workspace 路径配置
+- ✅ 完成平台健康巡检（磁盘 95%，需清理）
+- ✅ 确认 App 掘金监控机器人需求：首版聚焦 App Store，Markdown 输出，子 Agent 分段处理
+- ✅ 完善盯钉喵开发助理 SOP（session startup、角色定义、Copilot 调用方式）
 
 ---
 
-## 🚀 快速开始参考
-
-当收到新需求时：
-
-1. **理解** → 澄清需求、确认范围
-2. **设计** → 如需要则输出设计文档
-3. **编码** → 创建分支 → 编写代码
-4. **测试** → 本地测试 + 必要的自动化测试
-5. **文档** → 代码注释 + 更新相关文档
-6. **提交** → PR + 等待审核 → 合并
-7. **记录** → 更新本文件的"任务日志"
-
----
-
-> 这是盯钉喵开发助理的工作记忆。
+> 长期记忆在 MEMORY.md。日常记录在 memory/YYYY-MM-DD.md。

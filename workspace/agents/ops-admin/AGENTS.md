@@ -17,6 +17,12 @@ Before doing anything else:
 
 Don't ask permission. Just do it.
 
+## 工作流索引
+
+| 触发场景 | 文档 |
+|---------|------|
+| 注册新智能体 / 修改 openclaw.json / Gateway 排查 / 日志巡检 | `OPS_WORKFLOW.md` |
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:

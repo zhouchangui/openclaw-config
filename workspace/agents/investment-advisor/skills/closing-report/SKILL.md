@@ -5,88 +5,91 @@ description: Use when generating or scheduling A-share-focused closing reports t
 
 # closing-report
 
-## 目标
+## 单一入口定位
 
-生成标准化的**收盘报告**，在收盘后输出市场结构结论、技术面确认、板块强弱与次日观察点。
+`closing-report` 是 **标准化收盘报告** 的唯一 skill 入口。
 
-## 何时使用
+- 所有“收盘复盘 / 盘后总结 / 技术面收口”的任务都应先调用这个 skill。
+- cron 只应说明“按 closing-report 的 SOP 生成并发送”，不再嵌入命令细节。
 
-- 用户要求生成收盘报告
-- 定时任务在交易日收盘后触发
-- 需要输出“今天市场到底发生了什么”的结构化复盘
+## 适用场景
 
-## 固定执行流程
+- 用户要求生成收盘报告或盘后复盘
+- 交易日收盘后的定时任务
+- 需要输出指数结构、技术面确认、板块强弱与次日观察点
 
-1. 获取三大指数、成交额、板块强弱、外围映射
-2. 获取技术面数据（K 线 / MA / 成交量 / MACD）
-3. 生成结构判断与次日观察点
-4. 产出标准 JSON（遵循 `report-specs/shared-schema.md`）
-5. 生成 Markdown
-6. 使用 `report-templates/closing-market-report/` 生成 HTML
-7. 如启用发布，再上传 OSS 并生成飞书摘要
+## 输入参数
 
-## 必写内容
+- `tradingDate`：交易日，格式 `YYYY-MM-DD`
+- `mode`：`manual` / `scheduled`
+- `dryRun`：是否只生成本地产物，默认 `false`
+- `publish`：是否发布 HTML 并生成 URL，默认 `true`
+- `sourceMode`：默认 `live`；必要时可切换为 `files`
 
-- 一句话结论
-- 三点摘要
-- 核心市场看板
-- 指数技术面解读
-- 板块强弱图表/摘要
-- 结构判断
-- 明日观察点
-- 风险提示
+## 固定 SOP
+
+1. 确认目标交易日，并以真实收盘数据作为唯一依据。
+2. 获取指数、成交额、板块强弱、K 线、MA、成交量、MACD 等结构信息；涉及消息面时，新闻切片必须使用真实来源。
+3. 在工作目录中使用 `exec` 运行统一 CLI，生成 report-data、Markdown、HTML 与发布结果。
+4. 读取 stdout JSON，核对标题、结论、技术面摘要、结构判断、观察点与发布 URL。
+5. 若技术面或板块数据有缺口，必须按降级规则诚实标注，不能伪造 MACD / K 线。
+6. 若需要发送，只返回标题、结论、完整链接三行。
+
+## 最终回复合同
+
+- 第 1 行：报告标题
+- 第 2 行：一句话结论
+- 第 3 行：完整报告：`<url>`
+
+若本次未发布 HTML，必须明确说明只生成本地文件，不能伪造外部链接。
+
+## 产物合同
+
+- `data/closing/<tradingDate>.json`
+- `reports/closing/<tradingDate>.md`
+- `reports/closing/<tradingDate>.html`
+- `reports/closing/<tradingDate>.publish-result.json`
+
+## 降级规则
+
+- 若技术面数据缺失：去掉技术图区，保留文字版收盘报告
+- 若板块数据缺失：保留指数与结构判断，但明确标注“板块数据暂缺”
+- 若 HTML 失败：保底输出 Markdown
+- 若上传失败：保留本地文件，不伪造 URL
+- 若发送失败：显式返回失败信息
 
 ## 禁止事项
 
 - 不伪装成自动交易系统
 - 不输出买卖动作
 - 不强行解释所有涨跌
-- 不在缺少技术数据时伪造 MACD/K 线
+- 不在缺少技术数据时伪造 MACD / K 线
+- 不在 cron 文案中复制内部执行命令
 
-## 降级规则
+## 内部执行器
 
-- 若技术面数据缺失：去掉技术图区，保留文字版收盘报告
-- 若板块数据缺失：保留指数与结构判断，但标注“板块数据暂缺”
-- 若 HTML 失败：保底输出 Markdown
-- 若上传失败：保留本地 HTML，并仅发送文本摘要
-
-## 当前模板
-
-- `report-templates/closing-market-report/`
-
-## 产物约定
-
-- `data/closing/<date>.json`
-- `reports/closing/<date>.md`
-- `reports/closing/<date>.html`
-- `reports/closing/<date>.publish-result.json`
-
-## 当前执行命令
-
-使用内置 fixture 做 dry-run：
+当需要实际生成报告时，在工作目录中运行统一 CLI：
 
 ```bash
 cd /Users/zcg/.openclaw/workspace/agents/investment-advisor
-node report-runtime/reports/closing/run.mjs --tradingDate 2026-03-11 --mode manual --dryRun true --publish false
-```
-
-使用实时/外部快照文件：
-
-```bash
-cd /Users/zcg/.openclaw/workspace/agents/investment-advisor
-node report-runtime/reports/closing/run.mjs \
-  --tradingDate 2026-03-11 \
-  --mode manual \
-  --dryRun true \
-  --publish false \
-  --sourceMode files \
-  --quotesFile /path/to/quotes.json \
-  --sectorsFile /path/to/sectors.json \
-  --klineFile /path/to/kline.json \
-  --newsFile /path/to/news.json
+FEISHU_BOT_WEBHOOK= FEISHU_BOT_SECRET= \
+node report-runtime/cli/run-report.mjs \
+  --reportType closing \
+  --tradingDate <YYYY-MM-DD> \
+  --mode <manual|scheduled> \
+  --dryRun <true|false> \
+  --publish <true|false> \
+  --sourceMode <live|files>
 ```
 
 说明：
 
-- 指数与 K 线可直接用实时快照驱动。
-- 若板块或消息面不可达，允许标记为 `partial`，但必须在 `sources` 与摘要中明确说明。
+- 如需受控回放，可额外传入 `--quotesFile` / `--sectorsFile` / `--klineFile` / `--newsFile`。
+- 私聊发送优先，不依赖群 webhook。
+
+## 验证清单
+
+- 是否给出技术面与结构判断，而不是简单涨跌回顾
+- 若技术或板块缺失，是否诚实降级
+- 是否保留明日观察点与风险提示
+- 最终回复是否严格三行
