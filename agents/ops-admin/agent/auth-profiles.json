@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "profiles": {
+    "copilot-proxy:local": {
+      "type": "token",
+      "provider": "copilot-proxy",
+      "token": "n/a"
+    },
+    "github-copilot:github": {
+      "type": "token",
+      "provider": "github-copilot",
+      "token": "ghu_nJe3d0mNUVWE1dWyKHFu0h0DF3myrC2FrJvT"
+    },
+    "openai-codex:default": {
+      "type": "oauth",
+      "provider": "openai-codex",
+      "access": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjE5MzQ0ZTY1LWJiYzktNDRkMS1hOWQwLWY5NTdiMDc5YmQwZSIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSJdLCJjbGllbnRfaWQiOiJhcHBfRU1vYW1FRVo3M2YwQ2tYYVhwN2hyYW5uIiwiZXhwIjoxNzc0MDU1NTE4LCJodHRwczovL2FwaS5vcGVuYWkuY29tL2F1dGgiOnsiY2hhdGdwdF9hY2NvdW50X2lkIjoiMjc2YWRmYTgtODVkMC00MDk0LTgzYmItNzVlMGZkMmFkM2VhIiwiY2hhdGdwdF9hY2NvdW50X3VzZXJfaWQiOiJ1c2VyLUF6VE1iVWlOcVNjNHd6b0FZck5PR0JreF9fMjc2YWRmYTgtODVkMC00MDk0LTgzYmItNzVlMGZkMmFkM2VhIiwiY2hhdGdwdF9jb21wdXRlX3Jlc2lkZW5jeSI6Im5vX2NvbnN0cmFpbnQiLCJjaGF0Z3B0X3BsYW5fdHlwZSI6InBsdXMiLCJjaGF0Z3B0X3VzZXJfaWQiOiJ1c2VyLUF6VE1iVWlOcVNjNHd6b0FZck5PR0JreCIsInVzZXJfaWQiOiJ1c2VyLUF6VE1iVWlOcVNjNHd6b0FZck5PR0JreCJ9LCJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJ6Y2cxNzM0NTk3MjIwOEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sImlhdCI6MTc3MzE5MTUxOCwiaXNzIjoiaHR0cHM6Ly9hdXRoLm9wZW5haS5jb20iLCJqdGkiOiI0NjRkZmQ2My02OTFkLTQ0MTctYTM1OC1jYjU2Zjk4NjNlY2EiLCJuYmYiOjE3NzMxOTE1MTgsInB3ZF9hdXRoX3RpbWUiOjE3NzMxOTE1MTYxNzYsInNjcCI6WyJvcGVuaWQiLCJwcm9maWxlIiwiZW1haWwiLCJvZmZsaW5lX2FjY2VzcyJdLCJzZXNzaW9uX2lkIjoiYXV0aHNlc3NfWGtSQWN2MXZYWjA5VW5ZZVFON3VaczRtIiwic2wiOnRydWUsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTAyNjg5NTAzNTE1ODkxMTk2NTM2In0.ASeftt3925rbtsOS90kfUDNF12he8Tcw1X0a-UmTDAF9dPDpQK0CuPU3wL0OuKtKJlS7D7rwOgFI-7wKbQWQarmxiiedneOvvmgPiiRi2-sHSgIFfBbB6xoMMnV4muywt0-ff_V4iPLDuGjHnY-RtT2QT6g7Db7_1B-SIY20R-3IgqWYYyz9LVUC7Xmn0wqpX-OyeHF3Sp2jYmy6kJRvP9Hb_3ca9zrF9oIZsvsoOfKD72Jsv1u2iKYCABcwasL0md7QA8ZoTXU4NUNQukh4O8qpswm3Jy5b14N11zmqlRnArhNgaaveDYGH3viXa_HwuXFJfufJmr3d6BwiRtZ6Mzd4mx8W2-Aks8G5FBk8PBvg7dBeMlXg-TDrTVM5SuL8XiKWftRSlNrYCOKx7KryJ9lYWRRrLv5loYfKO6eMvpe6C-gZNwLYDusWJWZDV7qM6AQpDpyl8wjxcjsMnQbb_4qL1QS2YB3HaCEr8062HfL8B96CM8fXzzImu3Y4UokhkDewBi3gp6KqQ1kdQwW9gx_ThTWufV0IDpmswIobLkTuk0nwOQzG_dBS8OvYiQKJ5W3EOUJbwHqtVQ8D3CnHhgOMSNvUQXYSe_EXlPCKX3NTJqSmSuBqqGzRaXtWie9MImFDD5vmqGfGcbI5J6AML4Gbp2Dwv0EBRS_v8sTWIQE",
+      "refresh": "rt_9VTc0h8kqR9h3dSzhJIjJKhHa5ntarwlx0oFTf3lgto.Ia2UaiFW0eCy_GfnGCr_9ZFFqxPFgVs6bTQiAP_5Xlo",
+      "expires": 1774055518241,
+      "accountId": "276adfa8-85d0-4094-83bb-75e0fd2ad3ea"
+    }
+  },
+  "lastGood": {
+    "copilot-proxy": "copilot-proxy:local",
+    "github-copilot": "github-copilot:github",
+    "openai-codex": "openai-codex:default"
+  },
+  "usageStats": {
+    "copilot-proxy:local": {
+      "lastUsed": 1771255247803,
+      "errorCount": 0
+    },
+    "github-copilot:github": {
+      "lastUsed": 1773190839246,
+      "errorCount": 0
+    },
+    "openai-codex:default": {
+      "errorCount": 0,
+      "lastUsed": 1773220301251
+    }
+  }
+}
