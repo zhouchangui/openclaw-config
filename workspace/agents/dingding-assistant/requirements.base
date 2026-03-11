@@ -1,0 +1,141 @@
+filters:
+  and:
+    - file.hasTag("requirement")
+    - file.ext == "md"
+
+formulas:
+  days_since_created: '(now() - file.ctime).days'
+  status_icon: 'if(status == "completed", "✅", if(status == "in-progress", "🔄", if(status == "in-analysis", "🔍", if(status == "new", "🆕", "❓"))))'
+  priority_color: 'if(priority == "P0", "🔴", if(priority == "P1", "🟠", if(priority == "P2", "🟡", if(priority == "P3", "🟢", "⚪"))))'
+  workload_estimate: 'if(workload == "small", "😊", if(workload == "medium", "😐", if(workload == "large", "😰", "❓")))'
+
+properties:
+  type:
+    displayName: Type
+  status:
+    displayName: Status
+  priority:
+    displayName: Priority
+  workload:
+    displayName: Workload
+  category:
+    displayName: Category
+  formula.status_icon:
+    displayName: ""
+  formula.priority_color:
+    displayName: "PRI"
+  formula.workload_estimate:
+    displayName: "Size"
+  formula.days_since_created:
+    displayName: "Days"
+  created_date:
+    displayName: Created
+  assigned_to:
+    displayName: Owner
+
+views:
+  # 📊 表格视图 - 所有需求
+  - type: table
+    name: "All Requirements"
+    order:
+      - formula.status_icon
+      - file.name
+      - type
+      - formula.priority_color
+      - status
+      - category
+      - workload
+      - created_date
+      - formula.days_since_created
+    groupBy:
+      property: status
+      direction: ASC
+    summaries:
+      formula.days_since_created: Average
+
+  # 🔄 看板视图 - 按状态分组
+  - type: cards
+    name: "Kanban Board"
+    order:
+      - file.name
+      - type
+      - formula.priority_color
+      - category
+      - formula.workload_estimate
+    groupBy:
+      property: status
+      direction: ASC
+    filters:
+      not:
+        - 'status == "archived"'
+
+  # 🆕 新建需求
+  - type: table
+    name: "New Requirements"
+    filters:
+      and:
+        - 'status == "new"'
+    order:
+      - file.name
+      - type
+      - category
+      - formula.priority_color
+      - created_date
+    summaries:
+      formula.days_since_created: Average
+
+  # 🔍 分析中的需求
+  - type: table
+    name: "In Analysis"
+    filters:
+      and:
+        - 'status == "in-analysis"'
+    order:
+      - file.name
+      - type
+      - category
+      - assigned_to
+      - formula.priority_color
+      - formula.workload_estimate
+
+  # 🔴 高优先级需求
+  - type: table
+    name: "High Priority"
+    filters:
+      and:
+        - or:
+            - 'priority == "P0"'
+            - 'priority == "P1"'
+        - 'status != "completed"'
+    order:
+      - file.name
+      - type
+      - status
+      - category
+      - formula.workload_estimate
+      - created_date
+
+  # 📈 按类型分类
+  - type: list
+    name: "By Type"
+    order:
+      - file.name
+      - type
+      - status
+      - category
+    groupBy:
+      property: type
+      direction: ASC
+
+  # ✅ 已完成
+  - type: table
+    name: "Completed"
+    filters:
+      and:
+        - 'status == "completed"'
+    order:
+      - file.name
+      - type
+      - category
+      - created_date
+      - formula.days_since_created

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>理财助手｜A股收盘报告｜2026-03-11</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <main class="page">
+      <header class="hero-card">
+        <div class="hero-copy">
+          <div class="hero-topline">
+            <span class="badge">Closing Report</span>
+            <span class="report-id">CLOSE-2026-03-11</span>
+          </div>
+          <h1>A股收盘报告｜成长占优，新能源设备链成为最清晰主线</h1>
+          <p class="hero-summary">今天市场整体呈现温和走强、成长领先、资源回落的结构，指数层面并不亢奋，但新能源设备链与部分化工方向形成了比较清晰的当日主线。</p>
+
+          <div class="hero-meta">
+            <div class="meta-item">
+              <span class="meta-label">生成时间</span>
+              <span class="meta-value">2026-03-11 15:05 Asia/Shanghai</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">市场范围</span>
+              <span class="meta-value">A股为主｜兼顾港股、美股、宏观映射</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">风格判断</span>
+              <span class="meta-value">高端商业简报 × 科技仪表盘 × 技术面增强</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-highlight">
+          <div class="highlight-label">一句话结论</div>
+          <div class="highlight-text">市场资金正在从资源金属一侧切出，转向新能源设备链和部分景气制造方向。</div>
+          <div class="highlight-tags" id="highlight-tags"></div>
+        </aside>
+      </header>
+
+      <section class="summary-grid" id="summary-grid"></section>
+
+      <section class="section-block market-overview">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Market Board</div>
+            <h2>核心市场看板</h2>
+          </div>
+          <div class="section-side-note">先看结论，再看数据</div>
+        </div>
+        <div class="metric-grid" id="metric-grid"></div>
+      </section>
+
+      <section class="section-block technical-section">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Technical View</div>
+            <h2>指数技术面解读</h2>
+          </div>
+          <div class="section-side-note">K线 / 均线 / 成交量 / MACD / 技术结论</div>
+        </div>
+        <div class="technical-grid" id="technical-grid"></div>
+      </section>
+
+      <section class="section-block chart-section">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Charts</div>
+            <h2>图表快览</h2>
+          </div>
+          <div class="section-side-note">高价值图表优先，信息服务判断</div>
+        </div>
+        <div class="chart-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <h3>三大指数涨跌对比</h3>
+              <span class="panel-tag">Index</span>
+            </div>
+            <div class="bar-chart" id="index-chart"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head">
+              <h3>领涨 / 领跌板块</h3>
+              <span class="panel-tag">Sector</span>
+            </div>
+            <div class="dual-chart">
+              <div>
+                <div class="mini-title positive">领涨方向</div>
+                <div class="bar-chart compact" id="leaders-chart"></div>
+              </div>
+              <div>
+                <div class="mini-title negative">领跌方向</div>
+                <div class="bar-chart compact" id="laggards-chart"></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel narrative-panel">
+          <div class="panel-head">
+            <h3>结构判断</h3>
+            <span class="panel-tag">Narrative</span>
+          </div>
+          <div class="rich-text" id="structure-analysis"></div>
+        </article>
+
+        <article class="panel watch-panel">
+          <div class="panel-head">
+            <h3>明日观察点</h3>
+            <span class="panel-tag">Next</span>
+          </div>
+          <ul class="checklist" id="next-watch-list"></ul>
+          <div class="risk-box">
+            <div class="risk-title">风险提示</div>
+            <ul class="risk-list" id="risk-list"></ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="section-block data-section">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Details</div>
+            <h2>关键数据明细</h2>
+          </div>
+          <div class="section-side-note">保留必要数据，不做流水账堆砌</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>维度</th>
+                <th>数值</th>
+                <th>变化</th>
+                <th>解读</th>
+              </tr>
+            </thead>
+            <tbody id="detail-table"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-left">
+          <div class="footer-brand">📈 我的理财助手</div>
+          <div class="footer-text">更快抓重点，更稳看变化，更少被噪音带偏。</div>
+        </div>
+        <div class="footer-right">
+          <div>数据来源：腾讯行情、东方财富板块数据、公开财经资讯</div>
+          <div>模板版本：closing-market-report v0.2</div>
+        </div>
+      </footer>
+    </main>
+  </div>
+  <script src="preview-report.js"></script>
+</body>
+</html>

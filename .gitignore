@@ -1,0 +1,48 @@
+# --- OpenClaw Config Gitignore ---
+
+# OS common
+.DS_Store
+Thumbs.db
+
+# 1. Credentials & Secrets (NEVER COMMIT)
+credentials/
+identity/
+.env
+.env.local
+*.pem
+*.key
+
+# 2. Dynamic Session & Runtime Data
+logs/
+media/
+cron/
+delivery-queue/
+devices/
+update-check.json
+exec-approvals.json
+completions/
+browser/
+canvas/
+
+# 3. Agent Dynamic Results (Results & Artifacts)
+# 我们只保留 SOP (.md), 忽略数据 (.json/sqlite/pdf等结果)
+**/data/
+**/memory/
+**/reports/
+**/report-runtime/
+**/projects/
+
+# 4. Binary and Temp files
+*.bak
+*.tmp
+*.log
+*.sqlite
+
+# --- Keep Rules ---
+# 显式保留工作区中的配置和 SOP
+!workspace/
+!workspace/agents/
+!workspace/agents/**/*.md
+!workspace/agents/**/workflows/
+
+# 以后如果需要特定的 JSON 配置也可以加到这里
