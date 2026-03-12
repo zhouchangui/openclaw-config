@@ -49,7 +49,6 @@
       {
         "id": "dingding-assistant",
         "name": "盯钉喵开发运营助理",
-        "default": true,
         "workspace": "/Users/zcg/.openclaw/workspace/agents/dingding-assistant"
       },
       {

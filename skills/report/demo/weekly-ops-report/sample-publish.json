@@ -1,0 +1,117 @@
+{
+  "jobType": "weekly_ops_report",
+  "title": "Weekly Operations Report",
+  "summary": "Weekly growth, activation and retention summary.",
+  "templatePath": "skills/report/demo/weekly-ops-report",
+  "templateVars": {
+    "这里填写报告摘要": "A pulse check on activation, revenue, and retention across the last 7 days.",
+    "这里填写周度结论": "week-over-week net revenue acceleration"
+  },
+  "reportData": {
+    "meta": {
+      "pageTitle": "Weekly Operations Report",
+      "badge": "Weekly Ops Report",
+      "heading": "Momentum & Growth Signals",
+      "defaultPeriod": "2026-01-29 ~ 2026-02-04",
+      "timezone": "UTC",
+      "preparedBy": "WNL Ops Intelligence",
+      "retentionTarget": "35%",
+      "reportIdLabel": "Report ID: WNL-OPS-20260204",
+      "updatedAtLabel": "Last updated: 2026-02-05 08:10 UTC"
+    },
+    "template": {
+      "nextAction1": "Double down on SEA keyword clusters with CVR > 4.2%.",
+      "nextAction2": "Fix onboarding drop at Step 3 (mobile).",
+      "nextAction3": "Launch win-back flow for churned Pro tier users."
+    },
+    "defaultRange": "7",
+    "ranges": {
+      "7": {
+        "period": "2026-01-29 ~ 2026-02-04",
+        "headline": "+12.4%",
+        "kpis": {
+          "newUsers": 14620,
+          "activationRate": 38.6,
+          "activeUsers": 89210,
+          "dauWau": 52.3,
+          "netRevenue": 248400,
+          "refundRate": 1.8,
+          "d7Retention": 33.4
+        },
+        "line": {
+          "labels": ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"],
+          "values": [11200, 11840, 12560, 13040, 13820, 14560, 15110]
+        },
+        "bar": {
+          "labels": ["SEA", "App Store", "Referral", "Organic", "Partner"],
+          "values": [4200, 3100, 2300, 5200, 1700]
+        },
+        "donut": {
+          "labels": ["Starter", "Pro", "Enterprise"],
+          "values": [48, 34, 18]
+        },
+        "highlights": [
+          "Activation lift driven by refreshed onboarding video (+6.1%).",
+          "Weekend paid search CVR up 4.8% after bid pacing adjustment.",
+          "Churn spike concentrated in LATAM SMB cohort.",
+          "Support backlog cleared; median response time now 2h 14m."
+        ],
+        "channels": [
+          { "channel": "SEA", "spend": "$18.4k", "leads": "4.2k", "cvr": "4.9%", "cpa": "$42", "note": "Scaling top 12 keywords" },
+          { "channel": "App Store", "spend": "$9.6k", "leads": "3.1k", "cvr": "3.6%", "cpa": "$31", "note": "Feature card live" },
+          { "channel": "Referral", "spend": "$1.1k", "leads": "2.3k", "cvr": "6.4%", "cpa": "$12", "note": "Boost referral rewards" },
+          { "channel": "Organic", "spend": "$0", "leads": "5.2k", "cvr": "5.8%", "cpa": "$0", "note": "SEO spike from webinar" },
+          { "channel": "Partner", "spend": "$4.8k", "leads": "1.7k", "cvr": "3.1%", "cpa": "$55", "note": "Pipeline warming" }
+        ],
+        "anomalies": [
+          { "title": "Mobile Step 3 Drop", "detail": "18% drop vs baseline", "owner": "Growth" },
+          { "title": "Refunds Spike", "detail": "+0.9% in EU", "owner": "Billing" },
+          { "title": "Enterprise Trial Lag", "detail": "3-day SLA breach", "owner": "Sales Ops" }
+        ]
+      },
+      "28": {
+        "period": "2026-01-08 ~ 2026-02-04",
+        "headline": "+6.2%",
+        "kpis": {
+          "newUsers": 58240,
+          "activationRate": 36.9,
+          "activeUsers": 336400,
+          "dauWau": 49.1,
+          "netRevenue": 892600,
+          "refundRate": 2.1,
+          "d7Retention": 31.8
+        },
+        "line": {
+          "labels": ["W1", "W2", "W3", "W4"],
+          "values": [124000, 132400, 141800, 149600]
+        },
+        "bar": {
+          "labels": ["SEA", "App Store", "Referral", "Organic", "Partner"],
+          "values": [15800, 11800, 8600, 17400, 6200]
+        },
+        "donut": {
+          "labels": ["Starter", "Pro", "Enterprise"],
+          "values": [46, 36, 18]
+        },
+        "highlights": [
+          "Weekly active users grew steadily with no major dips.",
+          "Organic traffic now drives 30% of qualified leads.",
+          "Enterprise pipeline expansion lifted average contract value by 8%.",
+          "Customer success NPS improved to 46 (+4)."
+        ],
+        "channels": [
+          { "channel": "SEA", "spend": "$69.2k", "leads": "15.8k", "cvr": "4.6%", "cpa": "$44", "note": "New ad groups" },
+          { "channel": "App Store", "spend": "$36.8k", "leads": "11.8k", "cvr": "3.2%", "cpa": "$32", "note": "Localization push" },
+          { "channel": "Referral", "spend": "$4.2k", "leads": "8.6k", "cvr": "6.1%", "cpa": "$11", "note": "Referral week" },
+          { "channel": "Organic", "spend": "$0", "leads": "17.4k", "cvr": "5.5%", "cpa": "$0", "note": "SEO + content" },
+          { "channel": "Partner", "spend": "$14.7k", "leads": "6.2k", "cvr": "2.9%", "cpa": "$58", "note": "Joint webinar" }
+        ],
+        "anomalies": [
+          { "title": "Trial-to-Paid Delay", "detail": "Avg +1.6 days", "owner": "RevOps" },
+          { "title": "Support Escalations", "detail": "+12 tickets", "owner": "Support" },
+          { "title": "APAC Onboarding", "detail": "Activation -3.2%", "owner": "Growth" }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="220" viewBox="0 0 720 220">
+  <rect width="720" height="220" fill="#0b1228" rx="18"/>
+  <g transform="translate(24 24)" fill="#1f2937">
+    <rect width="40" height="40" rx="8"/>
+    <rect x="52" width="40" height="40" rx="8"/>
+    <rect x="104" width="40" height="40" rx="8"/>
+    <rect x="156" width="40" height="40" rx="8"/>
+    <rect x="208" width="40" height="40" rx="8"/>
+    <rect x="260" width="40" height="40" rx="8"/>
+    <rect x="312" width="40" height="40" rx="8"/>
+  </g>
+  <g transform="translate(24 76)">
+    <rect width="40" height="40" rx="8" fill="#164e63"/>
+    <rect x="52" width="40" height="40" rx="8" fill="#155e75"/>
+    <rect x="104" width="40" height="40" rx="8" fill="#0e7490"/>
+    <rect x="156" width="40" height="40" rx="8" fill="#0891b2"/>
+    <rect x="208" width="40" height="40" rx="8" fill="#0ea5e9"/>
+    <rect x="260" width="40" height="40" rx="8" fill="#38bdf8"/>
+    <rect x="312" width="40" height="40" rx="8" fill="#7dd3fc"/>
+  </g>
+  <g transform="translate(24 128)">
+    <rect width="40" height="40" rx="8" fill="#052e16"/>
+    <rect x="52" width="40" height="40" rx="8" fill="#064e3b"/>
+    <rect x="104" width="40" height="40" rx="8" fill="#0f766e"/>
+    <rect x="156" width="40" height="40" rx="8" fill="#14b8a6"/>
+    <rect x="208" width="40" height="40" rx="8" fill="#34d399"/>
+    <rect x="260" width="40" height="40" rx="8" fill="#6ee7b7"/>
+    <rect x="312" width="40" height="40" rx="8" fill="#a7f3d0"/>
+  </g>
+  <text x="388" y="72" font-family="Arial, sans-serif" font-size="16" fill="#94a3b8">Engagement Heatmap</text>
+  <text x="388" y="110" font-family="Arial, sans-serif" font-size="12" fill="#64748b">Darker blocks show higher retention.</text>
+</svg>

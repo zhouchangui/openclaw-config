@@ -23,6 +23,11 @@ exec-approvals.json
 completions/
 browser/
 canvas/
+agents/
+**/.openclaw/
+node_modules/
+**/node_modules/
+**/.vite/
 
 # 3. Agent Dynamic Results (Results & Artifacts)
 # 我们只保留 SOP (.md), 忽略数据 (.json/sqlite/pdf等结果)
@@ -31,6 +36,10 @@ canvas/
 **/reports/
 **/report-runtime/
 **/projects/
+!workspace/agents/**/report-runtime/
+!workspace/agents/**/report-runtime/**/*.mjs
+!workspace/agents/**/report-runtime/**/*.js
+!workspace/agents/**/report-runtime/**/*.json
 
 # 4. Binary and Temp files
 *.bak
@@ -44,5 +53,10 @@ canvas/
 !workspace/agents/
 !workspace/agents/**/*.md
 !workspace/agents/**/workflows/
+!skills/
+!skills/**/*.md
+!skills/**/*.js
+!skills/**/*.json
+skills/report/config.json
 
 # 以后如果需要特定的 JSON 配置也可以加到这里

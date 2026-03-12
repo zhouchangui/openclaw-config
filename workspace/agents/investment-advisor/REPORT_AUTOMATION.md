@@ -40,7 +40,7 @@
 所有报告统一走下面这条链路：
 
 ```text
-调用 report skill → skill 内部调用 run-report CLI → 抓取/装载数据 → 清洗/归一化 → 生成 report-data.json → 渲染本地 HTML → 调用共享 report skill 发布到 DDM → 生成最终摘要回复（供 cron / DM 投递）
+调用 report skill → skill 内部调用 run-report CLI → 抓取/装载数据 → 清洗/归一化 → 生成 report-data.json → 渲染本地 HTML → 调用仓库内共享 `skills/report` 发布到 DDM → 生成最终摘要回复（供 cron / DM 投递）
 ```
 
 ### 产物要求
@@ -83,6 +83,10 @@ investment-advisor/
     morning/
     closing/
     news/
+skills/
+  report/
+    SKILL.md
+    scripts/
 ```
 
 ---

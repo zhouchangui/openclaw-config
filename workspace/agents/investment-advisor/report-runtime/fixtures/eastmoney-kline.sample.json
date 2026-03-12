@@ -1,0 +1,44 @@
+{
+  "fetchedAt": "2026-03-11T15:10:00+08:00",
+  "series": [
+    {
+      "symbol": "sh000001",
+      "name": "上证指数",
+      "points": [
+        { "tradeDate": "2026-03-03", "open": 4062, "high": 4078, "low": 4048, "close": 4071, "volume": 1.42, "amount": 5601.2 },
+        { "tradeDate": "2026-03-04", "open": 4070, "high": 4084, "low": 4056, "close": 4061, "volume": 1.36, "amount": 5488.4 },
+        { "tradeDate": "2026-03-05", "open": 4060, "high": 4098, "low": 4058, "close": 4089, "volume": 1.55, "amount": 5912.7 },
+        { "tradeDate": "2026-03-06", "open": 4090, "high": 4106, "low": 4075, "close": 4080, "volume": 1.48, "amount": 5842.9 },
+        { "tradeDate": "2026-03-07", "open": 4082, "high": 4115, "low": 4079, "close": 4108, "volume": 1.63, "amount": 6124.1 },
+        { "tradeDate": "2026-03-10", "open": 4109, "high": 4122, "low": 4091, "close": 4116, "volume": 1.7, "amount": 6282.4 },
+        { "tradeDate": "2026-03-11", "open": 4115, "high": 4138, "low": 4106, "close": 4133, "volume": 1.82, "amount": 6498.8 }
+      ]
+    },
+    {
+      "symbol": "sz399001",
+      "name": "深证成指",
+      "points": [
+        { "tradeDate": "2026-03-03", "open": 14010, "high": 14086, "low": 13982, "close": 14058, "volume": 1.55, "amount": 7211.4 },
+        { "tradeDate": "2026-03-04", "open": 14060, "high": 14122, "low": 14012, "close": 14028, "volume": 1.48, "amount": 7088.2 },
+        { "tradeDate": "2026-03-05", "open": 14032, "high": 14188, "low": 14020, "close": 14152, "volume": 1.72, "amount": 7562.1 },
+        { "tradeDate": "2026-03-06", "open": 14154, "high": 14236, "low": 14110, "close": 14170, "volume": 1.66, "amount": 7440.7 },
+        { "tradeDate": "2026-03-07", "open": 14175, "high": 14332, "low": 14148, "close": 14298, "volume": 1.89, "amount": 7961.5 },
+        { "tradeDate": "2026-03-10", "open": 14300, "high": 14426, "low": 14280, "close": 14396, "volume": 1.96, "amount": 8220.1 },
+        { "tradeDate": "2026-03-11", "open": 14400, "high": 14502, "low": 14376, "close": 14465, "volume": 2.05, "amount": 8462.8 }
+      ]
+    },
+    {
+      "symbol": "sz399006",
+      "name": "创业板指",
+      "points": [
+        { "tradeDate": "2026-03-03", "open": 3230, "high": 3252, "low": 3218, "close": 3248, "volume": 1.18, "amount": 3421.8 },
+        { "tradeDate": "2026-03-04", "open": 3246, "high": 3261, "low": 3228, "close": 3236, "volume": 1.14, "amount": 3344.5 },
+        { "tradeDate": "2026-03-05", "open": 3238, "high": 3284, "low": 3230, "close": 3270, "volume": 1.32, "amount": 3567.2 },
+        { "tradeDate": "2026-03-06", "open": 3272, "high": 3298, "low": 3260, "close": 3286, "volume": 1.39, "amount": 3689.1 },
+        { "tradeDate": "2026-03-07", "open": 3288, "high": 3314, "low": 3278, "close": 3306, "volume": 1.56, "amount": 3842.6 },
+        { "tradeDate": "2026-03-10", "open": 3308, "high": 3338, "low": 3296, "close": 3326, "volume": 1.64, "amount": 3960.2 },
+        { "tradeDate": "2026-03-11", "open": 3328, "high": 3361, "low": 3318, "close": 3349, "volume": 1.82, "amount": 4188.3 }
+      ]
+    }
+  ]
+}

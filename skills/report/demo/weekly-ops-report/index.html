@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ meta.pageTitle }}</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-content">
+        <div class="badge">{{ meta.badge }}</div>
+        <h1>{{ meta.heading }}</h1>
+        <p class="subtitle">{{ 这里填写报告摘要 }}</p>
+        <div class="meta">
+          <div>
+            <span class="label">Period</span>
+            <span class="value" id="report-period">{{ meta.defaultPeriod }}</span>
+          </div>
+          <div>
+            <span class="label">Timezone</span>
+            <span class="value">{{ meta.timezone }}</span>
+          </div>
+          <div>
+            <span class="label">Prepared By</span>
+            <span class="value">{{ meta.preparedBy }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/cover.svg" alt="Cover art" />
+      </div>
+    </header>
+
+    <section class="controls">
+      <div class="range-toggle">
+        <button class="active" data-range="7">Last 7 Days</button>
+        <button data-range="28">Last 4 Weeks</button>
+      </div>
+      <div class="headline">
+        <strong id="headline-metric">+0.0%</strong>
+        <span>{{ 这里填写周度结论 }}</span>
+      </div>
+    </section>
+
+    <section class="kpi-grid">
+      <article class="kpi-card">
+        <div class="kpi-label">New Users</div>
+        <div class="kpi-value" data-metric="newUsers">0</div>
+        <div class="kpi-foot">Activation rate <span data-metric="activationRate">0%</span></div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Active Users</div>
+        <div class="kpi-value" data-metric="activeUsers">0</div>
+        <div class="kpi-foot">DAU / WAU <span data-metric="dauWau">0%</span></div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-label">Net Revenue</div>
+        <div class="kpi-value" data-metric="netRevenue">$0</div>
+        <div class="kpi-foot">Refund rate <span data-metric="refundRate">0%</span></div>
+      </article>
+      <article class="kpi-card highlight">
+        <div class="kpi-label">Retention (D7)</div>
+        <div class="kpi-value" data-metric="d7Retention">0%</div>
+        <div class="kpi-foot">Target {{ meta.retentionTarget }}</div>
+      </article>
+    </section>
+
+    <section class="chart-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Daily Active Users</h2>
+          <span class="panel-tag">Trend</span>
+        </div>
+        <canvas id="line-chart" height="200"></canvas>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Acquisition Mix</h2>
+          <span class="panel-tag">Channels</span>
+        </div>
+        <canvas id="bar-chart" height="200"></canvas>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Plan Contribution</h2>
+          <span class="panel-tag">Revenue</span>
+        </div>
+        <canvas id="donut-chart" height="200"></canvas>
+      </div>
+    </section>
+
+    <section class="insight-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Operational Highlights</h2>
+        </div>
+        <ul class="insight-list" id="highlight-list"></ul>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Retention Heatmap</h2>
+          <span class="panel-tag">Cohorts</span>
+        </div>
+        <img src="assets/heatmap.svg" alt="Heatmap" class="heatmap" />
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Channel Performance Table</h2>
+        <span class="panel-tag">MoM</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Spend</th>
+              <th>Leads</th>
+              <th>CVR</th>
+              <th>CPA</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="channel-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel anomalies">
+      <div class="panel-head">
+        <h2>Anomaly Watchlist</h2>
+        <span class="panel-tag alert">Investigate</span>
+      </div>
+      <div class="anomaly-grid" id="anomaly-grid"></div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <strong>Next Actions</strong>
+        <ol>
+          <li>{{ template.nextAction1 }}</li>
+          <li>{{ template.nextAction2 }}</li>
+          <li>{{ template.nextAction3 }}</li>
+        </ol>
+      </div>
+      <div class="footer-meta">
+        <div>{{ meta.reportIdLabel }}</div>
+        <div>{{ meta.updatedAtLabel }}</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="report.js"></script>
+</body>
+</html>

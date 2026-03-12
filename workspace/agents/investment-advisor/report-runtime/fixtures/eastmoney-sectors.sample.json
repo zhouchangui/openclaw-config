@@ -1,0 +1,43 @@
+{
+  "fetchedAt": "2026-03-11T15:08:00+08:00",
+  "leaders": [
+    {
+      "name": "逆变器",
+      "pctChange": 8.3,
+      "leadStock": "阳光电源",
+      "reason": "新能源设备链共振走强"
+    },
+    {
+      "name": "储能",
+      "pctChange": 7.6,
+      "leadStock": "派能科技",
+      "reason": "景气度与政策预期共振"
+    },
+    {
+      "name": "风电设备",
+      "pctChange": 5.58,
+      "leadStock": "金风科技",
+      "reason": "风格切向成长制造"
+    }
+  ],
+  "laggards": [
+    {
+      "name": "钨",
+      "pctChange": -4.27,
+      "leadStock": "厦门钨业",
+      "reason": "前期强势资源方向回吐"
+    },
+    {
+      "name": "稀土",
+      "pctChange": -3.75,
+      "leadStock": "北方稀土",
+      "reason": "获利盘兑现"
+    },
+    {
+      "name": "白银",
+      "pctChange": -2.67,
+      "leadStock": "盛达资源",
+      "reason": "贵金属热度回落"
+    }
+  ]
+}

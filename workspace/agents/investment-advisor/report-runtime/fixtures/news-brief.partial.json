@@ -1,0 +1,53 @@
+{
+  "fetchedAt": "2026-03-11T00:00:00.000Z",
+  "status": "partial",
+  "headline": "消息面 live 数据源尚未接入，当前报告仅提示系统状态与后续接入项。",
+  "summary": "消息面自动化的 HTML 发布与私聊投递已可用，但实时资讯筛选仍待接入，当前结果不代表真实市场判断。",
+  "conclusionTags": [
+    "待接 live news",
+    "仅链路验证"
+  ],
+  "topNews": [
+    {
+      "title": "消息面 live brief 待接入",
+      "summary": "当前仅验证报告生成、上传与私聊发送链路，未接入真实财经资讯流。",
+      "impactTarget": "全市场",
+      "bias": "中性",
+      "impactPath": "无实时新闻 -> 不输出真实消息驱动判断 -> 保持 partial 提示"
+    }
+  ],
+  "macroSignals": [
+    {
+      "text": "宏观 live 信号待接入。"
+    }
+  ],
+  "policySignals": [
+    {
+      "text": "政策 live 信号待接入。"
+    }
+  ],
+  "industrySignals": [
+    {
+      "text": "行业 live 信号待接入。"
+    }
+  ],
+  "noiseFilter": [
+    {
+      "text": "未接入实时资讯前，不应将样例或传闻代入真实判断。"
+    }
+  ],
+  "followUps": [
+    "补齐宏观、政策、行业、公司四层实时资讯筛选。"
+  ],
+  "risks": [
+    "当前消息面报告仅用于链路联调，不可视为真实投研结论。"
+  ],
+  "detailRows": [
+    {
+      "dimension": "系统状态",
+      "value": "消息源待接入",
+      "change": "partial",
+      "interpretation": "当前仅用于验证报告生成、上传与私聊投递链路。"
+    }
+  ]
+}

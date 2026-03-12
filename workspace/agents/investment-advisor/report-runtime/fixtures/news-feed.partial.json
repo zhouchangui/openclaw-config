@@ -1,0 +1,9 @@
+{
+  "source": "news-feed",
+  "fetchedAt": "2026-03-11T00:00:00.000Z",
+  "status": "partial",
+  "issues": [
+    "INVESTMENT_NEWS_FEED_URL 未配置，收盘报告消息面区块已降级为空白占位。"
+  ],
+  "items": []
+}

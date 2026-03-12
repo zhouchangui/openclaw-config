@@ -5,7 +5,7 @@
 所有报告统一走以下流程：
 
 ```text
-准备参数 → 获取数据 → 归一化 JSON → 校验字段 → 生成 Markdown → 生成 HTML → 调用共享 report skill 发布到 DDM → 归档结果
+准备参数 → 获取数据 → 归一化 JSON → 校验字段 → 生成 Markdown → 生成 HTML → 调用仓库共享 `skills/report` 发布到 DDM → 归档结果
 ```
 
 ---
@@ -169,7 +169,7 @@ reports/<report-type>/<date-or-slot>.html
 可选：
 
 - `PLATFORM_BASE_URL`
-- `REPORT_SKILL_SCRIPT_PATH`
+- `REPORT_SKILL_SCRIPT_PATH`（默认指向仓库内 `skills/report/scripts/index.js`）
 - `DDM_APP_ID` / `DDM_APP_SECRET`
 
 若 `publish=true` 且 `dryRun=false` 时缺少必填凭据，当前实现会：

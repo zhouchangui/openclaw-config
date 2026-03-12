@@ -1,0 +1,129 @@
+{
+  "fetchedAt": "2026-03-12T08:30:00+08:00",
+  "status": "ok",
+  "headline": "过去 24 小时里，真正值得投资者跟踪的变量集中在流动性、科技制造政策与海外利率预期。",
+  "summary": "本报告按过去 24 小时窗口筛选投资相关快讯，并额外单列 CCTV 新闻摘要，方便在开盘前快速补齐事件时间线。",
+  "conclusionTags": [
+    "24h 时间线",
+    "流动性",
+    "科技制造"
+  ],
+  "topNews": [
+    {
+      "title": "央行表示将保持流动性合理充裕",
+      "category": "宏观流动性",
+      "bias": "偏多",
+      "impactTarget": "A股指数与成长风格",
+      "impactPath": "流动性稳定 -> 风险偏好支撑 -> 成长资产估值压力缓和",
+      "summary": "公开市场操作保持平稳，市场预期利率环境对权益资产仍偏友好。",
+      "source": "东方财富全球资讯",
+      "publishedAt": "2026-03-12 07:45",
+      "url": "https://example.com/em-1"
+    },
+    {
+      "title": "工信部推进机器人与智能制造应用",
+      "category": "产业政策",
+      "bias": "偏多",
+      "impactTarget": "机器人、设备链",
+      "impactPath": "政策催化 -> 产业景气预期抬升 -> 设备链关注度上行",
+      "summary": "机器人、智能制造与设备链相关方向再获政策关注。",
+      "source": "财联社快讯",
+      "publishedAt": "2026-03-11 15:20",
+      "url": "https://example.com/cls-1"
+    },
+    {
+      "title": "美国 CPI 回落带动美债收益率下行",
+      "category": "海外宏观",
+      "bias": "偏多",
+      "impactTarget": "全球风险资产",
+      "impactPath": "通胀预期回落 -> 美债利率下行 -> 成长风险偏好改善",
+      "summary": "海外通胀压力边际缓和，美债收益率回落，成长资产风险偏好有所改善。",
+      "source": "新浪全球快讯",
+      "publishedAt": "2026-03-11 21:10",
+      "url": "https://example.com/sina-1"
+    }
+  ],
+  "timelineEvents": [
+    {
+      "source": "东方财富全球资讯",
+      "publishedAt": "2026-03-12 07:45",
+      "title": "央行表示将保持流动性合理充裕",
+      "summary": "公开市场操作保持平稳，市场预期利率环境对权益资产仍偏友好。",
+      "category": "宏观流动性",
+      "url": "https://example.com/em-1"
+    },
+    {
+      "source": "新浪全球快讯",
+      "publishedAt": "2026-03-11 21:10",
+      "title": "美国 CPI 回落带动美债收益率下行",
+      "summary": "海外通胀压力边际缓和，美债收益率回落，成长资产风险偏好有所改善。",
+      "category": "海外宏观",
+      "url": "https://example.com/sina-1"
+    },
+    {
+      "source": "财联社快讯",
+      "publishedAt": "2026-03-11 15:20",
+      "title": "工信部推进机器人与智能制造应用",
+      "summary": "机器人、智能制造与设备链相关方向再获政策关注。",
+      "category": "产业政策",
+      "url": "https://example.com/cls-1"
+    }
+  ],
+  "cctvDigest": [
+    {
+      "source": "央视新闻",
+      "publishedAt": "2026-03-11",
+      "title": "国务院常务会议研究推动人工智能与先进制造融合",
+      "summary": "政策层面对人工智能与先进制造融合提出新要求，利于提升科技制造板块关注度。"
+    },
+    {
+      "source": "央视新闻",
+      "publishedAt": "2026-03-11",
+      "title": "国家能源局强调保供稳价与新能源协同推进",
+      "summary": "能源保供与新能源建设并重，对电网设备、新能源链条形成中期观察线索。"
+    }
+  ],
+  "macroSignals": [
+    {
+      "text": "流动性与海外利率预期是过去 24 小时最重要的宏观变量。"
+    }
+  ],
+  "policySignals": [
+    {
+      "text": "人工智能与先进制造政策催化仍在累积。"
+    }
+  ],
+  "industrySignals": [
+    {
+      "text": "机器人、设备链与新能源方向值得继续跟踪。"
+    }
+  ],
+  "noiseFilter": [
+    {
+      "title": "非投资类快讯已剔除",
+      "text": "体育赛程、娱乐新闻等与市场定价无关的条目不会进入时间线。"
+    }
+  ],
+  "followUps": [
+    "关注开盘后科技制造方向是否得到成交额确认。",
+    "关注海外利率预期变化是否继续支持成长风险偏好。"
+  ],
+  "risks": [
+    "若盘中流动性预期逆转，隔夜宏观偏多结论需要及时降级。",
+    "若政策催化未转化为盘面承接，时间线里的利多只能视作信息层变量。"
+  ],
+  "detailRows": [
+    {
+      "dimension": "24 小时新闻条数",
+      "value": "3",
+      "change": "投资相关",
+      "interpretation": "仅保留与市场定价相关的快讯。"
+    },
+    {
+      "dimension": "CCTV 摘要",
+      "value": "2",
+      "change": "单列总结",
+      "interpretation": "政策与行业线索单独提炼。"
+    }
+  ]
+}
