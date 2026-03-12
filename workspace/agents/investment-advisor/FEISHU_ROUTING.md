@@ -60,8 +60,8 @@ node report-runtime/cli/run-report.mjs --reportType <closing|morning|news> --tra
 
 - `closing` / `morning` 使用 `--tradingDate`
 - `news` 使用 `--slot`
-- 真实发布需要配置 `FEISHU_BOT_WEBHOOK`
-- 若启用飞书机器人加签，再额外提供 `FEISHU_BOT_SECRET`
+- 真实发布需要配置 `AGENT_TOKEN`，或配置 `AGENT_APP_ID` + `AGENT_APP_SECRET`
+- 发布成功后返回 DDM 平台报告地址
 
 ## 响应方式
 

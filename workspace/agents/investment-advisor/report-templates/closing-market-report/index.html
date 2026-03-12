@@ -10,35 +10,17 @@
   <div class="page-shell">
     <main class="page">
       <header class="hero-card">
-        <div class="hero-copy">
-          <div class="hero-topline">
-            <span class="badge">{{ meta.badge }}</span>
-            <span class="report-id">{{ meta.reportId }}</span>
-          </div>
-          <h1>{{ meta.heading }}</h1>
-          <p class="hero-summary">{{ summary }}</p>
-
-          <div class="hero-meta">
-            <div class="meta-item">
-              <span class="meta-label">生成时间</span>
-              <span class="meta-value">{{ meta.generatedAt }}</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">市场范围</span>
-              <span class="meta-value">{{ meta.marketScope }}</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">风格判断</span>
-              <span class="meta-value">{{ meta.styleBias }}</span>
-            </div>
-          </div>
+        <div class="hero-topline">
+          <span class="badge">{{ meta.badge }}</span>
         </div>
-
-        <aside class="hero-highlight">
-          <div class="highlight-label">一句话结论</div>
-          <div class="highlight-text">{{ conclusion.text }}</div>
-          <div class="highlight-tags" id="highlight-tags"></div>
-        </aside>
+        <div class="hero-copy">
+          <h1>{{ title }}</h1>
+          <section class="hero-conclusion-block">
+            <div class="highlight-label">一句话结论</div>
+            <div class="hero-conclusion-text">{{ conclusion.text }}</div>
+            <div class="highlight-tags" id="highlight-tags"></div>
+          </section>
+        </div>
       </header>
 
       <section class="summary-grid" id="summary-grid"></section>

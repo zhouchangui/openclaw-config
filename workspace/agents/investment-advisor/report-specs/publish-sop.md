@@ -5,7 +5,7 @@
 所有报告统一走以下流程：
 
 ```text
-准备参数 → 获取数据 → 归一化 JSON → 校验字段 → 生成 Markdown → 生成 HTML → 上传 OSS → 发送飞书摘要 + 链接 → 归档结果
+准备参数 → 获取数据 → 归一化 JSON → 校验字段 → 生成 Markdown → 生成 HTML → 调用共享 report skill 发布到 DDM → 归档结果
 ```
 
 ---
@@ -51,7 +51,7 @@ node report-runtime/cli/run-all-dry.mjs --tradingDate <YYYY-MM-DD>
 建议：
 
 - 非敏感默认值放 `.env`
-- Access Key / webhook / secret 放 `.env.local`
+- `AGENT_TOKEN` 等敏感值放 `.env.local`
 
 ---
 
@@ -147,75 +147,44 @@ reports/<report-type>/<date-or-slot>.html
 
 ---
 
-## Step 7：上传 OSS
+## Step 7：发布到 DDM 平台
 
-上传成功后记录：
+发布成功后记录：
+- `platform`（固定为 `ddm`）
+- `reportId`
 - `url`
-- `bucket`
 - `path`
-- `uploadedAt`
+- `publishedAt`
 
-上传失败时：
+发布失败时：
 - 保留本地 HTML
-- 状态记为 `partial`
-- 飞书只发文本摘要或提示稍后补发
+- 写出失败态 `publish-result`
+- 直接报错，不伪造 URL
 
 真实发布所需环境变量：
 
-- `OSS_PROVIDER`（默认 `oss`；若使用火山引擎 TOS 则填 `tos`）
-- `OSS_BUCKET`
-- `OSS_REGION`
-- `OSS_ACCESS_KEY_ID`
-- `OSS_ACCESS_KEY_SECRET`
+- `AGENT_TOKEN`
+- 或 `AGENT_APP_ID` + `AGENT_APP_SECRET`
 
 可选：
 
-- `OSS_PUBLIC_BASE_URL`
-- `OSS_UPLOAD_BASE_URL`
-- `OSS_PREFIX`
-- `OSS_OBJECT_ACL`
+- `PLATFORM_BASE_URL`
+- `REPORT_SKILL_SCRIPT_PATH`
+- `DDM_APP_ID` / `DDM_APP_SECRET`
 
-火山引擎 TOS 约定：
-
-- `OSS_PROVIDER=tos`
-- endpoint 形如 `tos-<region>.volces.com`
-- 默认对象路径可用 `OSS_PREFIX=clawreport`
-- 当前实现走 `TOS4-HMAC-SHA256`
-
-若 `publish=true` 且 `dryRun=false` 时缺少必填 OSS / 飞书凭据，当前实现会：
+若 `publish=true` 且 `dryRun=false` 时缺少必填凭据，当前实现会：
 
 - 先写出失败态 `publish-result`
 - 再报错并要求补齐凭据
 
 ---
 
-## Step 8：发送飞书摘要 + 链接
-
-飞书消息只负责：
-- 报告标题
-- 一句话结论
-- 3 条摘要
-- 完整报告链接
-
-不要把整篇 HTML 内容塞进消息正文。
-
-真实发送至少需要：
-
-- `FEISHU_BOT_WEBHOOK`
-
-如机器人启用了加签，再额外提供：
-
-- `FEISHU_BOT_SECRET`
-
----
-
-## Step 9：归档
+## Step 8：归档
 
 记录：
 - 输入 JSON
 - Markdown
 - HTML
 - `publish-result`
-- 发送结果
 
 便于后续排错与复盘。

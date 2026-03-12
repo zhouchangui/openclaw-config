@@ -42,49 +42,26 @@
 
       <section class="section-block">
         <div class="section-head">
-          <div><div class="section-kicker">Top News</div><h2>今日关键消息</h2></div>
-          <div class="section-side-note">不是凑条数，而是筛真正会影响市场理解的事件</div>
+          <div><div class="section-kicker">Top 3</div><h2>最重要的三条消息</h2></div>
+          <div class="section-side-note">只保留今天最该带进判断框架的三条信息</div>
         </div>
         <div class="event-grid" id="top-news-grid"></div>
       </section>
 
       <section class="section-block">
         <div class="section-head">
-          <div><div class="section-kicker">Timeline</div><h2>24 小时投资新闻时间线</h2></div>
-          <div class="section-side-note">按时间倒序查看真正值得记录的投资相关新闻</div>
-        </div>
-        <div class="timeline-list" id="timeline-list"></div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-head">
-          <div><div class="section-kicker">CCTV Digest</div><h2>CCTV 新闻摘要</h2></div>
-          <div class="section-side-note">央视口径适合单列提炼，不混入快讯时间线</div>
-        </div>
-        <div class="signal-grid" id="cctv-grid"></div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-head">
-          <div><div class="section-kicker">Impact Matrix</div><h2>影响路径矩阵</h2></div>
-          <div class="section-side-note">把消息落到对象、方向和持续性</div>
+          <div><div class="section-kicker">Impact</div><h2>影响路径</h2></div>
+          <div class="section-side-note">消息不重复讲第二遍，只保留对象、方向和传导逻辑</div>
         </div>
         <div class="signal-grid" id="impact-grid"></div>
       </section>
 
-      <section class="content-grid triple-grid">
-        <article class="panel">
-          <div class="panel-head"><h3>宏观变量</h3><span class="panel-tag">Macro</span></div>
-          <ul class="checklist" id="macro-list"></ul>
-        </article>
-        <article class="panel">
-          <div class="panel-head"><h3>政策变量</h3><span class="panel-tag">Policy</span></div>
-          <ul class="checklist" id="policy-list"></ul>
-        </article>
-        <article class="panel">
-          <div class="panel-head"><h3>行业变量</h3><span class="panel-tag">Industry</span></div>
-          <ul class="checklist" id="industry-list"></ul>
-        </article>
+      <section class="section-block">
+        <div class="section-head">
+          <div><div class="section-kicker">Timeline</div><h2>精简时间线</h2></div>
+          <div class="section-side-note">只保留补充判断有用的时间线，不再重复完整解读</div>
+        </div>
+        <div class="timeline-list" id="timeline-list"></div>
       </section>
 
       <section class="content-grid">
@@ -96,34 +73,6 @@
           <div class="panel-head"><h3>风险提醒</h3><span class="panel-tag">Risk</span></div>
           <ul class="risk-list" id="risk-list"></ul>
         </article>
-      </section>
-
-      <section class="section-block">
-        <div class="section-head">
-          <div><div class="section-kicker">Noise Filter</div><h2>噪音过滤</h2></div>
-          <div class="section-side-note">明确哪些热闹消息不值得带入主判断</div>
-        </div>
-        <div class="signal-grid" id="noise-grid"></div>
-      </section>
-
-      <section class="section-block data-section">
-        <div class="section-head">
-          <div><div class="section-kicker">Details</div><h2>关键消息明细</h2></div>
-          <div class="section-side-note">消息面的价值在于路径，不在于堆满标题</div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>维度</th>
-                <th>数值</th>
-                <th>变化</th>
-                <th>解读</th>
-              </tr>
-            </thead>
-            <tbody id="detail-table"></tbody>
-          </table>
-        </div>
       </section>
 
       <footer class="footer">

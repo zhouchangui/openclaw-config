@@ -22,10 +22,17 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
   color: var(--text);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   background:
     radial-gradient(circle at top left, rgba(255, 187, 142, 0.28), transparent 28%),
     radial-gradient(circle at top right, rgba(255, 215, 185, 0.36), transparent 24%),
@@ -41,6 +48,24 @@ body {
   margin: 0 auto;
   display: grid;
   gap: 20px;
+}
+
+.page-shell,
+.page,
+.hero-card,
+.hero-copy,
+.hero-highlight,
+.section-block,
+.panel,
+.footer,
+.table-wrap,
+.summary-grid,
+.content-grid,
+.chart-grid,
+.technical-grid,
+.metric-grid,
+.hero-meta {
+  min-width: 0;
 }
 
 .hero-card,
@@ -66,6 +91,21 @@ body {
   font-size: clamp(28px, 4vw, 42px);
   line-height: 1.08;
   letter-spacing: -0.03em;
+}
+
+.hero-copy h1,
+.hero-summary,
+.meta-value,
+.highlight-text,
+.summary-card p,
+.rich-text,
+.checklist li,
+.risk-list li,
+.event-card p,
+.signal-card p,
+.timeline-item p,
+td {
+  overflow-wrap: anywhere;
 }
 
 .hero-topline {
@@ -178,6 +218,17 @@ body {
   padding: 8px 12px;
   font-size: 13px;
   color: var(--muted);
+}
+
+.report-id,
+.highlight-tag {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  height: auto;
+  min-height: 30px;
+  line-height: 1.35;
 }
 
 .summary-grid {
@@ -481,6 +532,7 @@ body {
 
 .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: 16px;
   border: 1px solid var(--line);
   background: rgba(255,255,255,0.74);
@@ -621,6 +673,76 @@ td {
 }
 
 @media (max-width: 640px) {
+  .focus-grid,
+  .signal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .page-shell {
+    padding: 10px 8px 24px;
+  }
+
+  .hero-card,
+  .section-block,
+  .panel,
+  .footer,
+  .summary-card,
+  .metric-card,
+  .event-card,
+  .signal-card,
+  .meta-item {
+    padding: 16px;
+  }
+
+  .hero-copy h1 {
+    font-size: 20px;
+    line-height: 1.28;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-summary,
+  .summary-card p,
+  .metric-note,
+  .rich-text,
+  .checklist li,
+  .risk-list li,
+  .event-card p,
+  .signal-card p {
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  th,
+  td {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .badge,
+  .report-id,
+  .panel-tag,
+  .highlight-tag,
+  .section-side-note,
+  .footer-text,
+  .footer-right {
+    font-size: 13px;
+  }
+
+  .highlight-text,
+  .section-head h2,
+  .panel-head h3,
+  .metric-value {
+    font-size: 20px;
+  }
+
+  .hero-meta,
+  .summary-grid,
+  .metric-grid,
+  .chart-grid,
+  .content-grid,
   .focus-grid,
   .signal-grid {
     grid-template-columns: 1fr;

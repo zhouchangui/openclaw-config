@@ -40,7 +40,7 @@
 所有报告统一走下面这条链路：
 
 ```text
-调用 report skill → skill 内部调用 run-report CLI → 抓取/装载数据 → 清洗/归一化 → 生成 report-data.json → 渲染 HTML → 上传/发布 → 生成最终摘要回复（供 cron / DM 投递）
+调用 report skill → skill 内部调用 run-report CLI → 抓取/装载数据 → 清洗/归一化 → 生成 report-data.json → 渲染本地 HTML → 调用共享 report skill 发布到 DDM → 生成最终摘要回复（供 cron / DM 投递）
 ```
 
 ### 产物要求
@@ -50,7 +50,7 @@
 - `data/<report-type>/<date>.json`：标准化输入数据
 - `reports/<report-type>/<date>.md`：文本版归档（便于审查）
 - `reports/<report-type>/<date>.html`：HTML 报告
-- `reports/<report-type>/<date-or-slot>.publish-result.json`：发布结果与 URL（如已启用 OSS）
+- `reports/<report-type>/<date-or-slot>.publish-result.json`：发布结果、DDM `reportId` 与 URL
 
 ---
 
@@ -89,7 +89,7 @@ investment-advisor/
 
 ## 错误降级策略
 
-当数据源不完整或上传失败时，统一按下面策略执行：
+当数据源不完整或发布失败时，统一按下面策略执行：
 
 ### L1：部分数据缺失
 - 允许继续生成报告
@@ -106,10 +106,10 @@ investment-advisor/
 - 记录失败原因
 - 如定时任务触发，飞书只发送文本摘要
 
-### L4：OSS 上传失败
+### L4：DDM 发布失败
 - 本地保留 HTML 与 JSON
-- 飞书摘要提示“完整页暂未发布成功”
-- 不阻塞文本版发送
+- 写出失败态 `publish-result`
+- 任务显式报错，不伪造可访问链接
 
 ---
 
@@ -137,11 +137,10 @@ investment-advisor/
 - 活动路径已统一到 `data/`、`reports/`、`report-templates/`、`report-runtime/`
 - `morning` / `closing` / `news` 三条 dry-run 流水线
 - 统一 CLI：`report-runtime/cli/run-report.mjs` 与 `run-all-dry.mjs`
-- 发布层支持 OSS 与火山引擎 TOS（`OSS_PROVIDER=tos`）
+- 发布层已切换为共享 `report` skill（DDM 平台 URL）
 
 待打通闭环：
-- live publish（OSS / Feishu）
-- 凭据就绪后的 staging 验证
+- DDM 凭据就绪后的 staging 验证
 
 ## 当前可运行命令
 

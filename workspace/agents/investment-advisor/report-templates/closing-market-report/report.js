@@ -152,7 +152,7 @@ function buildTechSvg(chart) {
 
   chart.candles.forEach((c, idx) => {
     const cx = plot.x + step * idx + step / 2;
-    const color = c.close >= c.open ? '#12966b' : '#d94f3d';
+    const color = c.close >= c.open ? '#d94f3d' : '#12966b';
     svg.appendChild(svgEl('line', { x1: cx, y1: priceY(c.high), x2: cx, y2: priceY(c.low), stroke: color, 'stroke-width': 1.6 }));
     const top = Math.min(priceY(c.open), priceY(c.close));
     const h = Math.max(Math.abs(priceY(c.open) - priceY(c.close)), 2.5);
@@ -178,7 +178,7 @@ function buildTechSvg(chart) {
     const x = vol.x + step * idx + step * 0.18;
     const h = (v / volMax) * vol.h;
     const candle = chart.candles[idx];
-    const color = candle.close >= candle.open ? 'rgba(18,150,107,0.68)' : 'rgba(217,79,61,0.68)';
+    const color = candle.close >= candle.open ? 'rgba(217,79,61,0.68)' : 'rgba(18,150,107,0.68)';
     svg.appendChild(svgEl('rect', { x, y: vol.y + vol.h - h, width: step * 0.64, height: h, rx: 2, fill: color }));
   });
 
@@ -189,7 +189,7 @@ function buildTechSvg(chart) {
     const h = Math.abs(v) / macdAbs * (macd.h / 2 - 2);
     const x = macd.x + step * idx + step * 0.22;
     const y = v >= 0 ? macdZero - h : macdZero;
-    svg.appendChild(svgEl('rect', { x, y, width: step * 0.56, height: h, rx: 2, fill: v >= 0 ? 'rgba(18,150,107,0.75)' : 'rgba(217,79,61,0.75)' }));
+    svg.appendChild(svgEl('rect', { x, y, width: step * 0.56, height: h, rx: 2, fill: v >= 0 ? 'rgba(217,79,61,0.75)' : 'rgba(18,150,107,0.75)' }));
   });
 
   const macdLineY = (v) => macd.y + (1 - (v + macdAbs) / (2 * macdAbs || 1)) * macd.h;

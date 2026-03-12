@@ -38,20 +38,21 @@ function mountMetrics() {
 
 function mountTopNews() {
   const root = document.getElementById('top-news-grid');
-  (reportData.topNews || []).forEach((item) => {
+  (reportData.topNews || []).slice(0, 3).forEach((item) => {
     const card = createEl('article', 'event-card');
     card.appendChild(createEl('div', 'mini-title', item.bias));
     card.appendChild(createEl('h3', '', item.title));
     card.appendChild(createEl('p', '', item.summary));
     card.appendChild(createEl('p', 'meta-inline', `${item.source}｜${item.publishedAt}`));
     card.appendChild(createEl('p', 'meta-inline', `${item.category}｜${item.impactTarget}`));
+    card.appendChild(createEl('p', '', `影响路径：${item.impactPath}`));
     root.appendChild(card);
   });
 }
 
 function mountTimeline() {
   const root = document.getElementById('timeline-list');
-  (reportData.timelineEvents || []).forEach((item) => {
+  (reportData.timelineEvents || []).slice(0, 6).forEach((item) => {
     const row = createEl('article', 'timeline-item');
     const meta = createEl('div', 'timeline-meta');
     meta.appendChild(createEl('span', 'timeline-source', item.source));
@@ -59,7 +60,6 @@ function mountTimeline() {
     row.appendChild(meta);
     row.appendChild(createEl('h3', '', item.title));
     row.appendChild(createEl('p', '', item.summary));
-    row.appendChild(createEl('p', 'meta-inline', item.category));
     if (item.url) {
       const link = createEl('a', 'timeline-link', '查看原文');
       link.href = item.url;
@@ -91,56 +91,15 @@ function mountList(targetId, items) {
   });
 }
 
-function mountNoise() {
-  const root = document.getElementById('noise-grid');
-  (reportData.noiseFilter || []).forEach((item) => {
-    const card = createEl('article', 'signal-card');
-    card.appendChild(createEl('h3', '', item.title));
-    card.appendChild(createEl('p', '', item.text));
-    root.appendChild(card);
-  });
-}
-
-function mountCctvDigest() {
-  const root = document.getElementById('cctv-grid');
-  (reportData.cctvDigest || []).forEach((item) => {
-    const card = createEl('article', 'signal-card');
-    card.appendChild(createEl('div', 'mini-title', item.source));
-    card.appendChild(createEl('h3', '', item.title));
-    card.appendChild(createEl('p', '', item.summary));
-    card.appendChild(createEl('p', 'meta-inline', item.publishedAt));
-    root.appendChild(card);
-  });
-}
-
-function mountTable() {
-  const body = document.getElementById('detail-table');
-  (reportData.detailRows || []).forEach((row) => {
-    const tr = document.createElement('tr');
-    [row.dimension, row.value, row.change, row.interpretation].forEach((cell) => {
-      const td = document.createElement('td');
-      td.textContent = cell;
-      tr.appendChild(td);
-    });
-    body.appendChild(tr);
-  });
-}
-
 function init() {
   mountTags();
   mountSummaries();
   mountMetrics();
   mountTopNews();
   mountTimeline();
-  mountCctvDigest();
   mountImpactMatrix();
-  mountList('macro-list', reportData.macroSignals || []);
-  mountList('policy-list', reportData.policySignals || []);
-  mountList('industry-list', reportData.industrySignals || []);
   mountList('follow-up-list', reportData.followUps || []);
   mountList('risk-list', reportData.risks || []);
-  mountNoise();
-  mountTable();
 }
 
 init();

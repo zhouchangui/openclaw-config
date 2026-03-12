@@ -7,6 +7,13 @@ import { buildMentionedMessage, buildMentionedCardContent } from "./mention.js";
 import { getFeishuRuntime } from "./runtime.js";
 import { resolveReceiveIdType, normalizeFeishuTarget } from "./targets.js";
 
+type ReportSummaryCardPayload = {
+  title: string;
+  conclusion: string;
+  bullets: string[];
+  url: string;
+};
+
 export type FeishuMessageInfo = {
   messageId: string;
   chatId: string;
@@ -16,6 +23,46 @@ export type FeishuMessageInfo = {
   contentType: string;
   createTime?: number;
 };
+
+export function parseReportSummaryCardPayload(text: string): ReportSummaryCardPayload | null {
+  const lines = String(text || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 3) {
+    return null;
+  }
+
+  const title = lines[0] || "";
+  const conclusionLine = lines.find((line) => /^结论[:：]/.test(line));
+  const urlLine = lines.find((line) => /^(链接|完整报告)[:：]\s*https?:\/\//.test(line));
+  const bullets = lines.filter((line) => /^-\s+/.test(line)).slice(0, 3);
+  const fallbackConclusionLine = lines.find((line, index) =>
+    index > 0 &&
+    !/^(链接|完整报告)[:：]\s*https?:\/\//.test(line) &&
+    !/^-\s+/.test(line),
+  );
+
+  if (!title || !urlLine) {
+    return null;
+  }
+
+  const conclusion = (conclusionLine ?? fallbackConclusionLine ?? "")
+    .replace(/^结论[:：]\s*/, "")
+    .trim();
+  const url = urlLine.replace(/^(链接|完整报告)[:：]\s*/, "").trim();
+
+  if (!conclusion || !url) {
+    return null;
+  }
+
+  return { title, conclusion, bullets, url };
+}
+
+export function looksLikeReportSummaryCardText(text: string): boolean {
+  return parseReportSummaryCardPayload(text) !== null;
+}
 
 /**
  * Get a message by its ID.
@@ -284,6 +331,53 @@ export async function updateCardFeishu(params: {
  * Uses schema 2.0 format for proper markdown rendering.
  */
 export function buildMarkdownCard(text: string): Record<string, unknown> {
+  const reportSummary = parseReportSummaryCardPayload(text);
+  if (reportSummary) {
+    const bulletMarkdown = reportSummary.bullets.length > 0
+      ? reportSummary.bullets.join("\n")
+      : "- 查看完整报告获取更多细节。";
+
+    return {
+      schema: "2.0",
+      config: {
+        wide_screen_mode: true,
+      },
+      header: {
+        title: {
+          tag: "plain_text",
+          content: reportSummary.title,
+        },
+        template: "orange",
+      },
+      body: {
+        elements: [
+          {
+            tag: "markdown",
+            content: `**一句话结论**\n${reportSummary.conclusion}`,
+          },
+          {
+            tag: "markdown",
+            content: `**三点重点**\n${bulletMarkdown}`,
+          },
+          {
+            tag: "action",
+            actions: [
+              {
+                tag: "button",
+                type: "primary",
+                text: {
+                  tag: "plain_text",
+                  content: "查看完整报告",
+                },
+                url: reportSummary.url,
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
+
   return {
     schema: "2.0",
     config: {

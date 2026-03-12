@@ -70,7 +70,6 @@ description: Use when generating or scheduling A-share-focused pre-market report
 
 ```bash
 cd /Users/zcg/.openclaw/workspace/agents/investment-advisor
-FEISHU_BOT_WEBHOOK= FEISHU_BOT_SECRET= \
 node report-runtime/cli/run-report.mjs \
   --reportType morning \
   --tradingDate <YYYY-MM-DD> \
@@ -83,7 +82,7 @@ node report-runtime/cli/run-report.mjs \
 说明：
 
 - 如需受控回放，可额外传入 `--briefFile <path>`。
-- 私聊发送优先，不依赖群 webhook。
+- `publish=true` 时会调用共享 `report` skill，返回 DDM 平台报告地址。
 
 ## 验证清单
 

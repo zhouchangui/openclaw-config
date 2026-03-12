@@ -73,7 +73,6 @@ description: Use when generating or scheduling investment news timeline reports 
 
 ```bash
 cd /Users/zcg/.openclaw/workspace/agents/investment-advisor
-FEISHU_BOT_WEBHOOK= FEISHU_BOT_SECRET= \
 node report-runtime/cli/run-report.mjs \
   --reportType news \
   --slot <slot> \
@@ -86,7 +85,7 @@ node report-runtime/cli/run-report.mjs \
 
 说明：
 
-- 个人私聊链路优先，不依赖群 webhook。
+- `publish=true` 时会调用共享 `report` skill，返回 DDM 平台报告地址。
 - 若使用受控回放，可额外传入 `--briefFile <path>`。
 
 ## 验证清单
