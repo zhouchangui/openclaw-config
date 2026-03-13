@@ -16,7 +16,8 @@ const input = {
   dryRun: parseBoolean(args.dryRun, false),
   workspaceRoot: args.workspaceRoot || resolveDefaultWorkspaceRoot(),
   marketFile: args.marketFile,
-  candidatesFile: args.candidatesFile
+  candidatesFile: args.candidatesFile,
+  llmDecisionFile: args.llmDecisionFile
 };
 
 const validation = validateSelectionInput(input);

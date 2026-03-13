@@ -13,6 +13,7 @@ import {
   normalizeBuyAllocations
 } from './portfolio.mjs';
 import { createAuditStore } from './audit-store.mjs';
+import { resolveSelectionLlmDecision } from './agent-decision.mjs';
 
 function resolveRuntimeRoot() {
   return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -205,11 +206,33 @@ export async function buildSelectionPackage({
     state: refreshedState,
     selectedCount: candidatePool.filter((item) => item.passedRules).length
   });
-  const llmDecisionJson = externalLlmDecision || buildFallbackBuyDecision({
+  const fallbackDecision = buildFallbackBuyDecision({
     candidatePool,
     portfolioDecision,
     marketGate
   });
+  const llmResolution = externalLlmDecision
+    ? {
+      decision: externalLlmDecision,
+      source: 'file',
+      agentMeta: null,
+      fallbackError: null
+    }
+    : await resolveSelectionLlmDecision({
+      tradingDate,
+      dryRun,
+      llmDecisionFile: null,
+      marketContext: {
+        ...marketSnapshot,
+        tradable: marketGate.tradable,
+        warnings: marketGate.warnings,
+        reasons: marketGate.reasons
+      },
+      portfolioDecision,
+      candidatePool,
+      fallbackDecision
+    });
+  const llmDecisionJson = llmResolution.decision;
   const virtualBuys = marketGate.tradable && status.enabled
     ? normalizeBuyAllocations({
       llmDecisionJson,
@@ -327,11 +350,21 @@ export async function buildSelectionPackage({
       marketFile: marketFile || resolveDefaultFixture('market-regime.good.json'),
       candidatesFile: candidatesFile || resolveDefaultFixture('candidates.sample.json'),
       llmDecisionFile: llmDecisionFile || null,
+      llmDecisionSource: llmResolution.source,
+      llmAgentSessionId: llmResolution.agentMeta?.sessionId || null,
+      llmAgentModel: llmResolution.agentMeta?.model || null,
+      llmAgentProvider: llmResolution.agentMeta?.provider || null,
       runtimeVersion: 'overnight-holding-v1'
     },
     exceptionsAndFallbacks: [
       ...(dryRun ? [{ type: 'fixture_mode' }] : []),
-      ...(externalLlmDecision ? [] : [{ type: 'llm_decision_missing', fallback: 'runtime_fallback' }])
+      ...(llmResolution.source === 'runtime_fallback'
+        ? [{
+          type: 'llm_decision_missing',
+          fallback: 'runtime_fallback',
+          reason: llmResolution.fallbackError
+        }]
+        : [])
     ]
   });
 

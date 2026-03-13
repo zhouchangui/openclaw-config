@@ -1,0 +1,25 @@
+{
+  "action": "buy",
+  "buyList": [
+    {
+      "symbol": "300750",
+      "name": "龙头候选",
+      "weightPct": 60,
+      "reason": "主线辨识度强，午后承接稳定。"
+    },
+    {
+      "symbol": "600519",
+      "name": "中军候选",
+      "weightPct": 40,
+      "reason": "趋势完整、流动性稳定，适合作为次核心配置。"
+    }
+  ],
+  "rejectedCandidates": [],
+  "principlesCited": [
+    "主线优先",
+    "评分加权"
+  ],
+  "riskFlags": [],
+  "confidence": "medium",
+  "decisionMode": "agent"
+}

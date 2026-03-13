@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import { parseBoolean, parseCliArgs, printJson } from '../lib/io.mjs';
 import { createAuditStore } from '../lib/audit-store.mjs';
+import { resolveSellReviewLlmDecision } from '../lib/agent-decision.mjs';
 import { applySellToState } from '../lib/portfolio.mjs';
 import { createStateStore } from '../lib/state-store.mjs';
 import { evaluateSellDecision } from '../lib/sell-decision.mjs';
@@ -78,6 +79,23 @@ function buildLlmDecisionJson(decisions) {
   };
 }
 
+function mergeAgentSellDecisions(decisions, llmDecisionJson) {
+  const sellList = new Map((llmDecisionJson.sellList || []).map((item) => [item.symbol, item]));
+  return decisions.map((item) => {
+    const agentDecision = sellList.get(item.symbol);
+    if (!agentDecision) {
+      return item;
+    }
+
+    return {
+      ...item,
+      action: agentDecision.action || item.action,
+      why: [agentDecision.reason || item.why.join('；')],
+      confidence: llmDecisionJson.confidence || item.confidence
+    };
+  });
+}
+
 function buildMarkdown({ tradingDate, checkpointAt, decisions }) {
   const lines = [
     `# 隔日持股 ${tradingDate} 卖出复盘`,
@@ -125,7 +143,7 @@ if (!validation.ok) {
   );
   const snapshots = await readJson(input.snapshotsFile);
   const externalLlmDecision = await readOptionalJson(input.llmDecisionFile);
-  const decisions = snapshots.checkpoints
+  const ruleDecisions = snapshots.checkpoints
     .filter((snapshot) => openSymbols.has(snapshot.symbol))
     .map((snapshot) => ({
       symbol: snapshot.symbol,
@@ -138,6 +156,24 @@ if (!validation.ok) {
         snapshot
       })
     }));
+  const fallbackDecision = buildLlmDecisionJson(ruleDecisions);
+  const llmResolution = externalLlmDecision
+    ? {
+      decision: externalLlmDecision,
+      source: 'file',
+      agentMeta: null,
+      fallbackError: null
+    }
+    : await resolveSellReviewLlmDecision({
+      tradingDate: input.tradingDate,
+      checkpointAt: input.checkpointAt,
+      dryRun: input.dryRun,
+      llmDecisionFile: null,
+      openPositions: beforeReviewPositions.filter((candidate) => candidate.status === 'open'),
+      snapshots: snapshots.checkpoints.filter((snapshot) => openSymbols.has(snapshot.symbol)),
+      fallbackDecision
+    });
+  const decisions = mergeAgentSellDecisions(ruleDecisions, llmResolution.decision);
   const executionLog = [];
 
   for (const item of decisions) {
@@ -196,7 +232,7 @@ if (!validation.ok) {
     source: input.source,
     checkpointAt: input.checkpointAt,
     decisions,
-    llmDecisionJson: externalLlmDecision || buildLlmDecisionJson(decisions),
+    llmDecisionJson: llmResolution.decision,
     executionLog,
     dataPath,
     markdownPath,
@@ -250,10 +286,20 @@ if (!validation.ok) {
     dataLineage: {
       snapshotsFile: input.snapshotsFile,
       llmDecisionFile: input.llmDecisionFile || null,
+      llmDecisionSource: llmResolution.source,
+      llmAgentSessionId: llmResolution.agentMeta?.sessionId || null,
+      llmAgentModel: llmResolution.agentMeta?.model || null,
+      llmAgentProvider: llmResolution.agentMeta?.provider || null,
       runtimeVersion: 'overnight-holding-v1'
     },
     exceptionsAndFallbacks: [
-      ...(externalLlmDecision ? [] : [{ type: 'llm_decision_missing', fallback: 'runtime_fallback' }]),
+      ...(llmResolution.source === 'runtime_fallback'
+        ? [{
+          type: 'llm_decision_missing',
+          fallback: 'runtime_fallback',
+          reason: llmResolution.fallbackError
+        }]
+        : []),
       ...decisions
         .filter((item) => item.rawSource)
         .map((item) => ({

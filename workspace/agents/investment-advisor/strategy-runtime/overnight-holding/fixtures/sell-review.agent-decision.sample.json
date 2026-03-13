@@ -1,0 +1,27 @@
+{
+  "action": "mixed",
+  "sellList": [
+    {
+      "symbol": "300750",
+      "action": "sell_now",
+      "reason": "开盘承接弱，优先止盈离场。"
+    },
+    {
+      "symbol": "600519",
+      "action": "sell_on_first_push",
+      "reason": "冲高兑现更符合当前盘面。"
+    },
+    {
+      "symbol": "002594",
+      "action": "hold_and_recheck",
+      "reason": "单边上行且量能确认，允许延后一个检查点。"
+    }
+  ],
+  "rejectedCandidates": [],
+  "principlesCited": [
+    "午前兑现优先"
+  ],
+  "riskFlags": [],
+  "confidence": "medium",
+  "decisionMode": "agent"
+}
