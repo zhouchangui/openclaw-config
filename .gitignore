@@ -9,6 +9,8 @@ credentials/
 identity/
 .env
 .env.local
+.secrets/
+**/.secrets/
 *.pem
 *.key
 

@@ -1,0 +1,49 @@
+{
+  "title_direction": "AI Agent 正在重塑软件开发，但 90% 的团队用错了",
+  "alternative_titles": [
+    "为什么你的 AI Agent 项目总是失败？",
+    "AI Agent 落地：3 个团队踩过的坑和活下来的方法"
+  ],
+  "style": "deep-analysis",
+  "target_audience": "技术管理者、CTO、技术创业者",
+  "angle": "不讲技术原理，从团队管理和工作流角度切入，分析 AI Agent 落地失败的真实原因",
+  "core_argument": "AI Agent 失败的根本原因不是技术不成熟，而是团队把它当工具而非协作者",
+  "outline": {
+    "hook": "一个反直觉的数据——某调研显示 87% 的企业 AI Agent 项目在 6 个月内被废弃",
+    "sections": [
+      {
+        "title": "误区一：用 AI Agent 替代人，而不是增强人",
+        "key_points": ["替代思维 vs 增强思维", "成功案例对比"],
+        "word_count_target": 500
+      },
+      {
+        "title": "误区二：没有给 Agent 设计清晰的职责边界",
+        "key_points": ["Agent 什么都能做 ≠ 什么都该做", "权限和审批机制"],
+        "word_count_target": 500
+      },
+      {
+        "title": "误区三：忽略了人机协作的工作流设计",
+        "key_points": ["Agent 不是黑盒", "审批门和反馈循环"],
+        "word_count_target": 500
+      }
+    ],
+    "conclusion": "核心观点总结 + 给读者的 3 个行动建议",
+    "cta": "你们团队在用 AI Agent 吗？评论区聊聊你的经验"
+  },
+  "materials": {
+    "data_needed": [
+      "企业 AI Agent 项目成功率统计（需要搜索验证）",
+      "具体失败案例（可匿名化处理）"
+    ],
+    "reference_articles": [
+      "搜索关键词：AI Agent 企业落地",
+      "搜索关键词：AI Agent 失败原因"
+    ]
+  },
+  "cover": {
+    "style": "tech",
+    "title_on_cover": "AI Agent 落地\n90% 的团队用错了"
+  },
+  "word_count_target": "2500-3500",
+  "from_calendar_id": 1
+}

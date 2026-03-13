@@ -14,6 +14,7 @@ import {
 } from './portfolio.mjs';
 import { createAuditStore } from './audit-store.mjs';
 import { resolveSelectionLlmDecision } from './agent-decision.mjs';
+import { resolveSelectionInputs } from './live-selection-inputs.mjs';
 
 function resolveRuntimeRoot() {
   return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -163,8 +164,14 @@ export async function buildSelectionPackage({
   dryRun = false
 }) {
   const resolvedWorkspaceRoot = workspaceRoot;
-  const marketSnapshot = await readJson(marketFile || resolveDefaultFixture('market-regime.good.json'));
-  const candidateSnapshot = await readJson(candidatesFile || resolveDefaultFixture('candidates.sample.json'));
+  const inputResolution = await resolveSelectionInputs({
+    tradingDate,
+    dryRun,
+    marketFile: marketFile || (dryRun ? resolveDefaultFixture('market-regime.good.json') : null),
+    candidatesFile: candidatesFile || (dryRun ? resolveDefaultFixture('candidates.sample.json') : null)
+  });
+  const marketSnapshot = inputResolution.marketSnapshot;
+  const candidateSnapshot = inputResolution.candidateSnapshot;
   const externalLlmDecision = llmDecisionFile ? await readJson(llmDecisionFile) : null;
   const marketGate = evaluateMarketRegime(marketSnapshot);
   const store = createStateStore({ workspaceRoot: resolvedWorkspaceRoot });
@@ -303,7 +310,8 @@ export async function buildSelectionPackage({
     messageSummary,
     dataPath,
     markdownPath,
-    dataSourceMode: dryRun ? 'fixtures' : 'external-files'
+    dataSourceMode: inputResolution.dataSourceMode,
+    inputDataSource: inputResolution.inputDataSource
   };
 
   await writeText(dataPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -347,8 +355,7 @@ export async function buildSelectionPackage({
       }
     ],
     dataLineage: {
-      marketFile: marketFile || resolveDefaultFixture('market-regime.good.json'),
-      candidatesFile: candidatesFile || resolveDefaultFixture('candidates.sample.json'),
+      ...inputResolution.dataLineage,
       llmDecisionFile: llmDecisionFile || null,
       llmDecisionSource: llmResolution.source,
       llmAgentSessionId: llmResolution.agentMeta?.sessionId || null,
@@ -358,6 +365,7 @@ export async function buildSelectionPackage({
     },
     exceptionsAndFallbacks: [
       ...(dryRun ? [{ type: 'fixture_mode' }] : []),
+      ...(inputResolution.exceptionsAndFallbacks || []),
       ...(llmResolution.source === 'runtime_fallback'
         ? [{
           type: 'llm_decision_missing',

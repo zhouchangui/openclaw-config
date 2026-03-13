@@ -1,0 +1,201 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.8",
+    "lastTouchedAt": "2026-03-11T06:04:29.293Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-11T01:13:10.152Z",
+    "lastRunVersion": "2026.3.8",
+    "lastRunCommand": "configure",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "openai-codex:default": {
+        "provider": "openai-codex",
+        "mode": "oauth"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openai-codex/gpt-5.4",
+        "fallbacks": [
+          "openai-codex/gpt-5.3-codex-spark",
+          "openai-codex/gpt-5.1-codex-mini"
+        ]
+      },
+      "models": {
+        "openai-codex/gpt-5.4": {},
+        "openai-codex/gpt-5.3-codex-spark": {},
+        "openai-codex/gpt-5.1-codex-mini": {}
+      },
+      "workspace": "/Users/zcg/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "heartbeat": {
+        "every": "24h",
+        "suppressToolErrorWarnings": true,
+        "lightContext": true
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    },
+    "list": [
+      {
+        "id": "dingding-assistant",
+        "name": "盯钉喵开发运营助理",
+        "workspace": "/Users/zcg/.openclaw/workspace/agents/dingding-assistant"
+      },
+      {
+        "id": "investment-advisor",
+        "name": "我的理财助手",
+        "workspace": "/Users/zcg/.openclaw/workspace/agents/investment-advisor"
+      },
+      {
+        "id": "ops-admin",
+        "name": "龙虾管家",
+        "workspace": "/Users/zcg/.openclaw/workspace/agents/ops-admin",
+        "model": "openai-codex/gpt-5.4"
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "dingding-assistant",
+      "match": {
+        "channel": "feishu",
+        "accountId": "dingding-dev"
+      }
+    },
+    {
+      "agentId": "investment-advisor",
+      "match": {
+        "channel": "feishu",
+        "accountId": "investment"
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "ops-admin",
+      "match": {
+        "channel": "feishu",
+        "accountId": "ops"
+      }
+    }
+  ],
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "appId": "cli_a919926915f8dcc1",
+      "appSecret": "__OPENCLAW_REDACTED__",
+      "domain": "feishu",
+      "streaming": true,
+      "blockStreaming": true,
+      "accounts": {
+        "dingding-dev": {
+          "appId": "cli_a93a959ece799bef",
+          "appSecret": "xE0uFbZvYFAE3VHbyb2hKb2CFeOmpIhv",
+          "name": "盯钉喵开发运营助理",
+          "description": "盯钉喵平台开发与运营工作",
+          "dmPolicy": "open",
+          "allowFrom": [
+            "*"
+          ]
+        },
+        "investment": {
+          "appId": "cli_a93a97ec8cfa5bdb",
+          "appSecret": "9sNd48BOG9KiyOrxNCartbw0c3HjEFYW",
+          "name": "我的理财助手",
+          "description": "投资顾问与理财管理",
+          "dmPolicy": "open",
+          "allowFrom": [
+            "*"
+          ],
+          "dmHistoryLimit": 100,
+          "dms": {
+            "*": {
+              "systemPrompt": "你是一个专业的投资顾问，负责市场分析和交易执行。在每个会话开始时，必须按顺序执行以下步骤：\n\n1. 读取 SOUL.md - 了解交易规则和风险管理政策\n2. 读取 IDENTITY.md - 确认你的身份和角色\n3. 读取 MEMORY.md - 了解历史交易和市场背景\n4. 检查 projects/investment/ 中的当前持仓和交易记录\n\n完成初始化后，你将拥有完整的交易上下文，能够提供专业的投资建议和执行交易。保持数据驱动和风险优先的原则。"
+            }
+          }
+        },
+        "default": {
+          "dmPolicy": "open",
+          "groupPolicy": "open",
+          "allowFrom": [
+            "*"
+          ],
+          "enabled": true
+        },
+        "ops": {
+          "appId": "cli_a919926915f8dcc1",
+          "appSecret": "kJdqa1Zm4b0CfioGNgx1tfEtc58glkcJ",
+          "name": "龙虾管家",
+          "dmPolicy": "open",
+          "allowFrom": [
+            "*"
+          ]
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "0bc8e7e5ffbb957cc46d25b66ef21d26e8ef77ec20beb734"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "calendar.add",
+        "contacts.add",
+        "reminders.add"
+      ]
+    }
+  },
+  "plugins": {
+    "allow": [
+      "feishu"
+    ],
+    "load": {
+      "paths": []
+    },
+    "entries": {
+      "feishu": {
+        "enabled": true
+      }
+    }
+  }
+}

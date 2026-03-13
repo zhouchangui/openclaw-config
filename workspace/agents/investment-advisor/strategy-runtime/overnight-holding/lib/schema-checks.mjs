@@ -11,11 +11,10 @@ export function validateSelectionInput(input = {}) {
     issues.push('variant must be leader, midcore, or both');
   }
   if (!input.dryRun) {
-    if (!input.marketFile) {
-      issues.push('marketFile is required when dryRun is false');
-    }
-    if (!input.candidatesFile) {
-      issues.push('candidatesFile is required when dryRun is false');
+    const hasMarketFile = Boolean(input.marketFile);
+    const hasCandidatesFile = Boolean(input.candidatesFile);
+    if (hasMarketFile !== hasCandidatesFile) {
+      issues.push('marketFile and candidatesFile must be provided together');
     }
   }
   return { ok: issues.length === 0, issues };

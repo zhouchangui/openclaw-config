@@ -127,6 +127,7 @@ export function createStateStore({ workspaceRoot }) {
 
     async requestResume(event) {
       const state = await this.loadState();
+      state.status.enabled = false;
       state.status.resumeRequired = true;
       state.status.lastResumeRequest = createRecordedEvent(event);
       await this.saveState(state);

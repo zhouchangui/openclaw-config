@@ -1,0 +1,112 @@
+{
+  "account": {
+    "name": "REPLACE_ACCOUNT_NAME",
+    "field": "REPLACE_FIELD_OR_LEAVE_EMPTY",
+    "target_audience": "REPLACE_TARGET_AUDIENCE_OR_LEAVE_EMPTY"
+  },
+  "defaults": {
+    "language": "zh-CN",
+    "publish_method": "auto",
+    "theme": "default",
+    "style": "story-driven",
+    "max_articles_per_week": 5,
+    "default_author": ""
+  },
+  "editorial": {
+    "positioning": "result-driven-promotion",
+    "goal": "通过案例与结果展示产品能自动帮用户做什么，为公众号宣传和引流服务",
+    "core_question": "它到底能自动帮这类用户做什么",
+    "preferred_openings": [
+      "具体人群场景",
+      "被流程拖住的工作瞬间",
+      "前后变化对比"
+    ],
+    "article_structure": [
+      "场景痛点",
+      "产品接手",
+      "结果收益",
+      "适合谁用"
+    ],
+    "writing_habits": [
+      "少讲原理，多讲替你做掉什么",
+      "少讲功能清单，多讲前后变化",
+      "少讲技术细节，多讲用户价值与结果"
+    ],
+    "cta_habits": [
+      "鼓励读者对号入座",
+      "自然引导关注或咨询",
+      "避免生硬销售口播"
+    ]
+  },
+  "cover": {
+    "ai_enabled": true,
+    "default_size": "1200*630",
+    "fallback_style": "tech",
+    "comment": "ai_enabled 为 true 时优先调用 EasyClaw Seedream 5.0 Lite。最终发布封面应优先保持品牌感，不建议长期依赖随机图。"
+  },
+  "visual": {
+    "cover_strategy": {
+      "direction": "brand-first",
+      "layout": "单主标题 + 品牌识别 + 少量辅助图形",
+      "style_keywords": [
+        "AI SaaS",
+        "自动化工作流",
+        "品牌封面",
+        "蓝紫科技感"
+      ]
+    },
+    "inline_image_strategy": {
+      "direction": "case-card-first",
+      "max_images": 3,
+      "preferred_cards": [
+        "流程替代卡",
+        "结果收益卡",
+        "适用人群卡"
+      ],
+      "style_keywords": [
+        "白底信息卡片",
+        "简洁图标",
+        "结果导向",
+        "易于公众号阅读"
+      ]
+    }
+  },
+  "trending": {
+    "platforms": ["weibo", "zhihu", "baidu"],
+    "min_cross_platform": 2,
+    "max_items_per_platform": 5,
+    "comment": "min_cross_platform 表示话题至少出现在几个平台才视为有效热点"
+  },
+  "publishing": {
+    "preferred_method": "api",
+    "enable_freepublish": true,
+    "poll_status": true,
+    "poll_max_retries": 6,
+    "poll_interval_ms": 5000,
+    "need_open_comment": 1,
+    "only_fans_can_comment": 0,
+    "comment": "preferred_method: api / browser / wenyan / auto; enable_freepublish 为 true 时草稿创建后自动提交正式发布"
+  },
+  "paths": {
+    "drafts": "./drafts",
+    "covers": "./output/covers",
+    "calendar": "./content_calendar.json",
+    "secrets": "./.secrets"
+  },
+  "tools": {
+    "cover_generator": "skills/cover-generator/scripts/generate_cover.py",
+    "article_search": "skills/content-planner/scripts/search_wechat.js",
+    "publish_api": "skills/publish-orchestrator/scripts/wechat-api.ts",
+    "markdown_to_html": "skills/markdown-to-html/scripts/main.ts"
+  },
+  "quality_gate": {
+    "must_check": [
+      "是否明确目标人群",
+      "是否讲清产品接手了什么",
+      "是否讲清结果收益",
+      "是否有品牌封面",
+      "是否有至少一张案例型结果卡"
+    ]
+  },
+  "timezone": "Asia/Shanghai"
+}

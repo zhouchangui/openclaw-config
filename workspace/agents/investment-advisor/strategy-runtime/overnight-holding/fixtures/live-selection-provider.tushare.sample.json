@@ -1,0 +1,40 @@
+{
+  "provider": "tushare",
+  "marketSnapshot": {
+    "mainThemeClarity": 85,
+    "sectorBreadthConcentration": 78,
+    "afternoonStrengthRetention": 82,
+    "coreLeaderConfirmation": 88
+  },
+  "candidateSnapshot": {
+    "sectorContinuityScore": 82,
+    "candidates": [
+      {
+        "symbol": "300750",
+        "name": "龙头候选",
+        "boardLeadership": 92,
+        "themeResonance": 90,
+        "liquidityStability": 66,
+        "trendIntegrity": 72,
+        "afternoonSupport": 78,
+        "nextDayRealizability": 68,
+        "raw": {
+          "decisionPrice": 398.53
+        }
+      },
+      {
+        "symbol": "600519",
+        "name": "中军候选",
+        "boardLeadership": 60,
+        "themeResonance": 74,
+        "liquidityStability": 91,
+        "trendIntegrity": 88,
+        "afternoonSupport": 80,
+        "nextDayRealizability": 87,
+        "raw": {
+          "decisionPrice": 1411.84
+        }
+      }
+    ]
+  }
+}

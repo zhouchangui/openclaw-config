@@ -1,0 +1,57 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF7ED"/>
+      <stop offset="1" stop-color="#FED7AA"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#7C2D12" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <circle cx="1020" cy="96" r="46" fill="#FDBA74" opacity="0.65"/>
+  <circle cx="1090" cy="156" r="18" fill="#FB923C" opacity="0.8"/>
+  <g filter="url(#shadow)">
+    <rect x="66" y="78" width="350" height="474" rx="34" fill="#FFFDF9"/>
+    <rect x="432" y="122" width="704" height="356" rx="32" fill="#FFFCF8"/>
+    <rect x="790" y="70" width="286" height="110" rx="24" fill="#FFFFFF"/>
+    <rect x="840" y="504" width="242" height="72" rx="24" fill="#FFFFFF"/>
+  </g>
+  <g>
+    <ellipse cx="242" cy="394" rx="92" ry="96" fill="#F97316"/>
+    <ellipse cx="190" cy="286" rx="48" ry="60" fill="#F97316"/>
+    <ellipse cx="294" cy="286" rx="48" ry="60" fill="#F97316"/>
+    <path d="M130 346C92 334 70 300 82 266C110 272 140 286 160 314" fill="#EA580C"/>
+    <path d="M354 314C374 286 404 272 432 266C444 300 422 334 384 346" fill="#EA580C"/>
+    <path d="M212 418C232 438 252 438 272 418" stroke="#7C2D12" stroke-width="6" stroke-linecap="round"/>
+    <line x1="210" y1="220" x2="210" y2="260" stroke="#7C2D12" stroke-width="8" stroke-linecap="round"/>
+    <line x1="276" y1="220" x2="276" y2="260" stroke="#7C2D12" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="210" cy="210" r="16" fill="#FFF7ED"/>
+    <circle cx="276" cy="210" r="16" fill="#FFF7ED"/>
+    <circle cx="210" cy="210" r="7" fill="#431407"/>
+    <circle cx="276" cy="210" r="7" fill="#431407"/>
+  </g>
+  <g>
+    <rect x="484" y="172" width="604" height="254" rx="24" fill="#FFF7ED" stroke="#FDBA74" stroke-width="3"/>
+    <rect x="520" y="210" width="438" height="38" rx="12" fill="#FFE7CC"/>
+    <rect x="520" y="272" width="284" height="22" rx="11" fill="#FED7AA"/>
+    <rect x="520" y="312" width="368" height="22" rx="11" fill="#FED7AA"/>
+    <rect x="520" y="352" width="224" height="22" rx="11" fill="#FED7AA"/>
+    <rect x="930" y="344" width="108" height="44" rx="14" fill="#F97316"/>
+    <text x="984" y="372" text-anchor="middle" font-size="24" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#FFFFFF">发布</text>
+  </g>
+  <g>
+    <text x="820" y="120" text-anchor="middle" font-size="28" font-weight="700" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#9A3412">内容流程</text>
+    <text x="820" y="152" text-anchor="middle" font-size="20" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#C2410C">选题 · 写稿 · 配图 · 发布</text>
+  </g>
+  <g>
+    <rect x="454" y="486" width="126" height="44" rx="18" fill="#FFF1E6" stroke="#FDBA74"/>
+    <rect x="602" y="486" width="126" height="44" rx="18" fill="#FFF1E6" stroke="#FDBA74"/>
+    <rect x="750" y="486" width="126" height="44" rx="18" fill="#FFF1E6" stroke="#FDBA74"/>
+    <text x="517" y="515" text-anchor="middle" font-size="22" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#7C2D12">选题规划</text>
+    <text x="665" y="515" text-anchor="middle" font-size="22" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#7C2D12">写稿提效</text>
+    <text x="813" y="515" text-anchor="middle" font-size="22" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#7C2D12">发布检查</text>
+  </g>
+  <text x="454" y="574" font-size="56" font-weight="700" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#7C2D12">龙虾与公众号</text>
+  <text x="454" y="614" font-size="28" font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#9A3412">为什么内容时代更需要一个“会干活的助手”</text>
+</svg>

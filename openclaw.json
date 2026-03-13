@@ -1,7 +1,7 @@
 {
   "meta": {
     "lastTouchedVersion": "2026.3.8",
-    "lastTouchedAt": "2026-03-11T06:04:29.293Z"
+    "lastTouchedAt": "2026-03-13T03:26:13.217Z"
   },
   "wizard": {
     "lastRunAt": "2026-03-11T01:13:10.152Z",
@@ -61,6 +61,16 @@
         "name": "龙虾管家",
         "workspace": "/Users/zcg/.openclaw/workspace/agents/ops-admin",
         "model": "openai-codex/gpt-5.4"
+      },
+      {
+        "id": "wechat-lobster",
+        "name": "wechat-lobster",
+        "workspace": "/Users/zcg/.openclaw/workspace/agents/wechat-lobster",
+        "agentDir": "/Users/zcg/.openclaw/agents/wechat-lobster/agent",
+        "identity": {
+          "name": "龙虾公众号管家",
+          "emoji": "🦞"
+        }
       }
     ]
   },
@@ -85,6 +95,14 @@
       "match": {
         "channel": "feishu",
         "accountId": "ops"
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "wechat-lobster",
+      "match": {
+        "channel": "feishu",
+        "accountId": "wechat-lobster"
       }
     }
   ],
@@ -154,6 +172,16 @@
           "appId": "cli_a919926915f8dcc1",
           "appSecret": "kJdqa1Zm4b0CfioGNgx1tfEtc58glkcJ",
           "name": "龙虾管家",
+          "dmPolicy": "open",
+          "allowFrom": [
+            "*"
+          ]
+        },
+        "wechat-lobster": {
+          "enabled": true,
+          "name": "龙虾公众号管家",
+          "appId": "cli_a9393e7899f7dbd3",
+          "appSecret": "JjlEguSxFGlZzm2X3LIYXd45l5KoLFoL",
           "dmPolicy": "open",
           "allowFrom": [
             "*"

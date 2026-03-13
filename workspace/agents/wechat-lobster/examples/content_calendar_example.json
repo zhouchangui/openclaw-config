@@ -1,0 +1,49 @@
+{
+  "week": "2026-W11",
+  "created_at": "2026-03-06",
+  "account": "示例公众号",
+  "articles": [
+    {
+      "id": 1,
+      "date": "2026-03-09",
+      "day": "周一",
+      "topic": "AI Agent 正在重塑软件开发，但 90% 的团队用错了",
+      "angle": "不讲技术原理，从团队管理和工作流角度切入，分析 AI Agent 落地失败的真实原因",
+      "style": "deep-analysis",
+      "audience": "技术管理者、CTO、技术创业者",
+      "urgency": "this-week",
+      "status": "planned",
+      "keywords": ["AI Agent", "软件开发", "团队管理"],
+      "reference_urls": [
+        "https://mp.weixin.qq.com/s/example1",
+        "https://mp.weixin.qq.com/s/example2"
+      ]
+    },
+    {
+      "id": 2,
+      "date": "2026-03-11",
+      "day": "周三",
+      "topic": "我用 3 个月从零搭建了个人 AI 助手，踩过的坑都在这里",
+      "angle": "个人经历复盘，重点讲选型决策过程和实际效果对比，不是教程而是反思",
+      "style": "story-driven",
+      "audience": "对 AI 感兴趣的技术人、独立开发者",
+      "urgency": "this-week",
+      "status": "planned",
+      "keywords": ["AI 助手", "个人项目", "经验分享"],
+      "reference_urls": []
+    },
+    {
+      "id": 3,
+      "date": "2026-03-13",
+      "day": "周五",
+      "topic": "5 分钟搞定：用 Claude Code 自动化你的日常开发任务",
+      "angle": "极简教程，聚焦 3 个最实用的自动化场景，每个场景给完整命令示例",
+      "style": "practical-guide",
+      "audience": "日常使用命令行的开发者",
+      "urgency": "reserve",
+      "status": "planned",
+      "keywords": ["Claude Code", "开发效率", "自动化"],
+      "reference_urls": []
+    }
+  ]
+}

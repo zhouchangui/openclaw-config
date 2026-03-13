@@ -26,6 +26,16 @@ try {
   await store.appendJournalEvent('2026-03-13', 'sell-review', { type: 'sell_review_snapshot' });
   await store.recordStopEvent({ type: 'market_stop', tradingDate: '2026-03-12' });
   await store.recordStopEvent({ type: 'user_pause', tradingDate: '2026-03-12' });
+  const resumed = await store.resume({ tradingDate: '2026-03-13', reason: 'user_confirmed' });
+  assert.equal(resumed.status.enabled, true);
+  assert.equal(resumed.status.resumeRequired, false);
+
+  const resumeRequestedWhileEnabled = await store.requestResume({
+    tradingDate: '2026-03-13',
+    reason: 'market_recovered'
+  });
+  assert.equal(resumeRequestedWhileEnabled.status.enabled, false);
+  assert.equal(resumeRequestedWhileEnabled.status.resumeRequired, true);
 
   const reloaded = await store.loadState();
   assert.equal(reloaded.virtualBuys.length, 1);
