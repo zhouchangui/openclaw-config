@@ -2,6 +2,8 @@ import path from 'node:path';
 import { execFile as execFileCallback } from 'node:child_process';
 import { promisify } from 'node:util';
 
+import { readJsonFile } from '../lib/io.mjs';
+
 const execFile = promisify(execFileCallback);
 
 const INVESTMENT_KEYWORDS = [
@@ -330,6 +332,14 @@ export async function fetchAkshareNewsTimeline({
   pythonBin = process.env.INVESTMENT_AKSHARE_PYTHON || 'python3',
   execFileImpl = execFile
 } = {}) {
+  if (process.env.INVESTMENT_AKSHARE_NEWS_FIXTURE_FILE) {
+    const payload = await readJsonFile(process.env.INVESTMENT_AKSHARE_NEWS_FIXTURE_FILE);
+    return {
+      source: payload.source || 'akshare-news',
+      ...payload
+    };
+  }
+
   const scriptPath = path.join(
     path.dirname(new URL(import.meta.url).pathname),
     '..',
@@ -345,5 +355,8 @@ export async function fetchAkshareNewsTimeline({
     }
   );
 
-  return parseAkshareNewsPayload(JSON.parse(stdout), { asOf, windowHours });
+  return {
+    source: 'akshare-news',
+    ...parseAkshareNewsPayload(JSON.parse(stdout), { asOf, windowHours })
+  };
 }

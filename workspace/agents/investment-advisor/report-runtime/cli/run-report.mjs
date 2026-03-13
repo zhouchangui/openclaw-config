@@ -33,7 +33,7 @@ export async function runReport(options) {
   const mode = options.mode || 'manual';
   const dryRun = parseBoolean(options.dryRun, true);
   const publish = parseBoolean(options.publish, false);
-  const sourceMode = options.sourceMode || 'fixtures';
+  const sourceMode = options.sourceMode || 'live';
 
   if (reportType === 'closing') {
     return runClosingReport({

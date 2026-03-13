@@ -6,15 +6,16 @@ import { fileURLToPath } from 'node:url';
 
 const execFile = promisify(execFileCallback);
 const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const runtimeRoot = path.join(workspaceRoot, 'report-runtime');
 
 async function runCli(args) {
   const { stdout } = await execFile('node', args, { cwd: workspaceRoot });
   return JSON.parse(stdout);
 }
 
-const closing = await runCli(['report-runtime/cli/run-report.mjs', '--reportType', 'closing', '--tradingDate', '2026-03-11', '--mode', 'scheduled', '--dryRun', 'true', '--publish', 'false']);
-const morning = await runCli(['report-runtime/cli/run-report.mjs', '--reportType', 'morning', '--tradingDate', '2026-03-11', '--mode', 'scheduled', '--dryRun', 'true', '--publish', 'false']);
-const news = await runCli(['report-runtime/cli/run-report.mjs', '--reportType', 'news', '--slot', '2026-03-11-am', '--mode', 'scheduled', '--dryRun', 'true', '--publish', 'false']);
+const closing = await runCli(['report-runtime/cli/run-report.mjs', '--reportType', 'closing', '--tradingDate', '2026-03-11', '--mode', 'scheduled', '--dryRun', 'true', '--publish', 'false', '--sourceMode', 'fixtures']);
+const morning = await runCli(['report-runtime/cli/run-report.mjs', '--reportType', 'morning', '--tradingDate', '2026-03-11', '--mode', 'scheduled', '--dryRun', 'true', '--publish', 'false', '--sourceMode', 'files', '--briefFile', path.join(runtimeRoot, 'fixtures', 'morning-brief.sample.json')]);
+const news = await runCli(['report-runtime/cli/run-report.mjs', '--reportType', 'news', '--slot', '2026-03-11-am', '--mode', 'scheduled', '--dryRun', 'true', '--publish', 'false', '--sourceMode', 'files', '--briefFile', path.join(runtimeRoot, 'fixtures', 'news-brief.sample.json')]);
 const allDry = await runCli(['report-runtime/cli/run-all-dry.mjs', '--tradingDate', '2026-03-11', '--mode', 'scheduled']);
 
 for (const result of [closing, morning, news]) {

@@ -1,3 +1,5 @@
+import { readJsonFile, readTextFile } from '../lib/io.mjs';
+
 function readAttr(block, attrName) {
   const match = block.match(new RegExp(`${attrName}="([^"]+)"`));
   return match ? match[1] : null;
@@ -46,6 +48,24 @@ export async function fetchNewsFeed({
   url = process.env.INVESTMENT_NEWS_FEED_URL,
   fetchImpl = globalThis.fetch
 } = {}) {
+  if (process.env.INVESTMENT_NEWS_FEED_FIXTURE_FILE) {
+    const fixturePath = process.env.INVESTMENT_NEWS_FEED_FIXTURE_FILE;
+    if (fixturePath.endsWith('.json')) {
+      const payload = await readJsonFile(fixturePath);
+      return {
+        source: payload.source || 'news-feed',
+        fetchedAt: payload.fetchedAt || new Date().toISOString(),
+        status: payload.status || 'ok',
+        issues: Array.isArray(payload.issues) ? payload.issues : [],
+        items: Array.isArray(payload.items) ? payload.items : []
+      };
+    }
+
+    return parseNewsFeedHtml(await readTextFile(fixturePath), {
+      fetchedAt: new Date().toISOString()
+    });
+  }
+
   if (!url) {
     throw new Error(
       'News feed live fetch requires INVESTMENT_NEWS_FEED_URL or an explicit url parameter.'

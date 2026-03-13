@@ -22,9 +22,9 @@ function parseArgs(argv) {
 
 export async function runAllDry({ tradingDate = '2026-03-11', mode = 'manual' } = {}) {
   return Promise.all([
-    runReport({ reportType: 'closing', tradingDate, mode, dryRun: true, publish: false }),
-    runReport({ reportType: 'morning', tradingDate, mode, dryRun: true, publish: false }),
-    runReport({ reportType: 'news', slot: `${tradingDate}-am`, mode, dryRun: true, publish: false })
+    runReport({ reportType: 'closing', tradingDate, mode, dryRun: true, publish: false, sourceMode: 'fixtures' }),
+    runReport({ reportType: 'morning', tradingDate, mode, dryRun: true, publish: false, sourceMode: 'fixtures' }),
+    runReport({ reportType: 'news', slot: `${tradingDate}-am`, mode, dryRun: true, publish: false, sourceMode: 'fixtures' })
   ]);
 }
 

@@ -1,0 +1,46 @@
+{
+  "source": "tushare-pro-quotes",
+  "fetchedAt": "2026-03-11T15:05:00+08:00",
+  "status": "ok",
+  "indices": [
+    {
+      "symbol": "sh000001",
+      "name": "上证指数",
+      "last": 4133.43,
+      "previousClose": 4122.1,
+      "open": 4110.2,
+      "high": 4141.9,
+      "low": 4098.77,
+      "change": 11.33,
+      "pctChange": 0.27,
+      "volume": 582345678,
+      "turnover": 612345678901.23
+    },
+    {
+      "symbol": "sz399001",
+      "name": "深证成指",
+      "last": 14465.41,
+      "previousClose": 14353.2,
+      "open": 14360.88,
+      "high": 14502.0,
+      "low": 14322.51,
+      "change": 112.21,
+      "pctChange": 0.78,
+      "volume": 688123456,
+      "turnover": 801234567890.12
+    },
+    {
+      "symbol": "sz399006",
+      "name": "创业板指",
+      "last": 3349.53,
+      "previousClose": 3306.23,
+      "open": 3310.18,
+      "high": 3361.0,
+      "low": 3298.41,
+      "change": 43.3,
+      "pctChange": 1.31,
+      "volume": 318765432,
+      "turnover": 320123456789.45
+    }
+  ]
+}
