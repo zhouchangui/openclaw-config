@@ -23,6 +23,7 @@
 | 早盘前 / 盘前简报 | `morning-report` | `skills/morning-report/SKILL.md` |
 | 收盘后复盘 / 技术回顾 | `closing-report` | `skills/closing-report/SKILL.md` |
 | 24h 新闻资讯 / 政策解读 | `news-report` | `skills/news-report/SKILL.md` |
+| 隔日持股研究 / 次日卖出复盘 / 策略停复 | `trading` | `skills/trading/SKILL.md` |
 | 临时行情查询 / 指标计算 | `akshare-stock` skill | - |
 
 ### Cron + Direct Chat 规则
@@ -34,7 +35,8 @@
 ### 报告投递规则
 
 - 定时报告默认投递到用户飞书 DM（`investment` 账号）
-- 最终 reply 格式：① 报告标题 ② 一句话结论 ③ 完整报告 URL
+- 报告类最终 reply 格式：① 报告标题 ② 一句话结论 ③ 完整报告 URL
+- `trading` 类最终 reply 格式：① 操作标题 ② 一句话结论 ③ 关键动作摘要 / 恢复提示
 - 生成或投递失败时明确报错，绝不假装成功
 
 ## 文件说明
@@ -54,6 +56,7 @@
 ✅ 三种报告技能就位（morning / closing / news）  
 ✅ 真实数据接口就位（akshare）  
 ✅ 定时投递就位（Feishu DM）  
+✅ 隔日持股研究 workflow 就位（统一走 `trading` skill，仅虚拟买入 / 虚拟卖出复盘）  
 
 ## 记忆管理
 
@@ -65,3 +68,4 @@
 - 所有行情数据必须通过真实接口获取，**禁止猜测或幻觉**
 - 新闻时间切片精确限定在上一个交易日结束到当前时间
 - 报告未完成时不发送占位符或"稍后补充"
+- 隔日持股 workflow 仅允许虚拟买入、虚拟卖出与复盘研究，**禁止真实下单或账户执行**

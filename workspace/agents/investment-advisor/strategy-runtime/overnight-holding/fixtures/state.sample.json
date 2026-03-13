@@ -1,0 +1,12 @@
+{
+  "virtualBuys": [],
+  "currentPositions": [],
+  "selectionJournal": [],
+  "sellReviewJournal": [],
+  "stopEvents": [],
+  "status": {
+    "enabled": true,
+    "stoppedBy": null,
+    "resumeRequired": false
+  }
+}
