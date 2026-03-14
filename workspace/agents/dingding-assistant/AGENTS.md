@@ -34,7 +34,8 @@
 2. Read `USER.md` — 你在帮谁
 3. Read `memory/YYYY-MM-DD.md`（今天 + 昨天）— 最近发生的事
 4. **仅限主 session**（用户直接对话）：Read `MEMORY.md` — 长期背景知识
-5. 根据用户触发词确认当前工作流（开发 or 运维），无需提前加载工作流文档
+5. Read `../HEARTBEAT_STANDARD.md` — 多智能体 heartbeat / cron 统一规范
+6. 根据用户触发词确认当前工作流（开发 or 运维），无需提前加载工作流文档
 
 ## 系统准备状态
 
@@ -64,3 +65,9 @@
 - **日常记录**：`memory/YYYY-MM-DD.md` — 每次 session 结束或关键事件后追加
 - **长期记忆**：`MEMORY.md` — 提炼后的重要决策、经验、背景（不是原始日志）
 - 发现值得长期记忆的内容时立即更新，不要等到"以后再说"
+
+## Heartbeat / Cron 规范
+
+- 本智能体必须遵守 `../HEARTBEAT_STANDARD.md`
+- heartbeat 主要用于开发/运维流程遗漏巡检、轻量提醒和周回顾
+- 精确定时、明确产出型动作优先进入 cron 或对应工作流，而不是堆进 heartbeat

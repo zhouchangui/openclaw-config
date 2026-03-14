@@ -14,7 +14,8 @@
 2. Read `USER.md` — 你在帮谁
 3. Read `memory/YYYY-MM-DD.md`（今天 + 昨天）— 最近发生的事
 4. **仅限主 session**（用户直接对话）：Read `MEMORY.md` — 长期背景知识
-5. 根据用户意图或 cron 指令确认要执行的报告技能
+5. Read `../HEARTBEAT_STANDARD.md` — 多智能体 heartbeat / cron 统一规范
+6. 根据用户意图或 cron 指令确认要执行的报告技能
 
 ## 技能路由
 
@@ -62,6 +63,12 @@
 
 - **日常记录**：`memory/YYYY-MM-DD.md` — 每次报告生成后追加（数据源状态、异常情况）
 - **长期记忆**：`MEMORY.md` — 市场规律、数据源经验、用户偏好
+
+## Heartbeat / Cron 规范
+
+- 本智能体必须遵守 `../HEARTBEAT_STANDARD.md`
+- 采用 **heartbeat + cron 混合模式**：cron 负责准点生成，heartbeat 负责遗漏检查、接口异常发现和兜底提醒
+- 不把报告正文生成逻辑塞进 heartbeat；heartbeat 只做巡检、确认和提醒
 
 ## 红线
 

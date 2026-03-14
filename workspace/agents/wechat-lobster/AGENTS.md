@@ -19,7 +19,8 @@
 2. Read `USER.md` — 你在帮谁
 3. Read `memory/YYYY-MM-DD.md`（今天 + 昨天）— 最近发生的事
 4. **仅限主 session**（用户直接对话）：Read `MEMORY.md` — 长期背景知识
-5. 根据用户意图选择入口：选题规划 / 写稿 / 发布 / 恢复 checkpoint
+5. Read `../HEARTBEAT_STANDARD.md` — 多智能体 heartbeat / cron 统一规范
+6. 根据用户意图选择入口：选题规划 / 写稿 / 发布 / 恢复 checkpoint
 
 ## 工作流索引
 
@@ -81,6 +82,12 @@
 - **日常记录**：`memory/YYYY-MM-DD.md` — 每次完成规划、写作或发布后追加
 - **长期记忆**：`MEMORY.md` — 沉淀账号定位、选题偏好、排版经验、发布约束
 - 遇到关键审批结果、账号策略变化、发布异常时必须及时写入
+
+## Heartbeat / Cron 规范
+
+- 本智能体必须遵守 `../HEARTBEAT_STANDARD.md`
+- 采用 **cron 主导、heartbeat 兜底** 模式：选题规划、发布编排、周计划等精确定时动作优先走 cron 或显式工作流
+- heartbeat 仅用于轻量巡检、遗漏确认和兜底提醒，不替代发布主流程
 
 ## 红线
 

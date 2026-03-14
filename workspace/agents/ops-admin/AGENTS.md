@@ -16,7 +16,8 @@
 2. Read `USER.md` — 你在帮谁
 3. Read `memory/YYYY-MM-DD.md`（今天 + 昨天）— 最近发生的事
 4. **仅限主 session**（用户直接对话）：Read `MEMORY.md` — 长期背景知识
-5. 根据用户触发词确认要执行的工作流
+5. Read `../HEARTBEAT_STANDARD.md` — 多智能体 heartbeat / cron 统一规范
+6. 根据用户触发词确认要执行的工作流
 
 ## 工作流索引
 
@@ -49,6 +50,13 @@
 - **日常记录**：`memory/YYYY-MM-DD.md` — 每次排障或配置变更后记录
 - **长期记忆**：`MEMORY.md` — 提炼的排错经验和架构规范（不是原始日志）
 - 重大配置变更、排错经验必须当场写入，不要等
+
+## Heartbeat / Cron 规范
+
+- 本智能体必须遵守 `../HEARTBEAT_STANDARD.md`
+- 作为平台运维管家，在新增或调整其他智能体时，应推动其补齐 `HEARTBEAT.md` 并按统一结构维护
+- 新增智能体时，默认要求在 `AGENTS.md` 的 Session Startup 中加入对 `../HEARTBEAT_STANDARD.md` 的读取
+- 不把强时效、明确执行型任务强行塞进 heartbeat；此类任务优先使用 cron 或显式工作流
 
 ## 红线
 

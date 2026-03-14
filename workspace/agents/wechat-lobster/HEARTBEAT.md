@@ -1,5 +1,32 @@
-# HEARTBEAT.md
+# HEARTBEAT.md - 龙虾公众号管家巡检清单
 
-# Keep this file empty (or with only comments) to skip heartbeat API calls.
+## 目标
+本智能体的 heartbeat 仅用于公众号运营流程的轻量巡检和兜底提醒，不替代选题规划、写稿、排版、发布等需要明确时刻和审批门的主流程。
 
-# Add tasks below when you want the agent to check something periodically.
+## 每次 Heartbeat 执行
+- 检查近期是否存在已计划但未推进的选题或发布事项
+- 检查是否有待补记的重要运营结论、审批结果或发布异常
+- 检查是否存在需要用户确认但长时间未推进的 checkpoint
+
+## 安静条件
+以下情况回复 `HEARTBEAT_OK`：
+- 当前没有明确的周运营、发布或审批待办
+- 所有关键 checkpoint 都在正常推进
+- 当前阶段更适合由 cron 或用户显式触发，而非 heartbeat 推动
+
+## 普通提醒条件
+以下情况主动提醒用户：
+- 已有选题计划，但长期未进入写稿或审核阶段
+- 存在待确认 checkpoint，且超过合理等待时间
+- 近期运营结论、异常或策略调整尚未写入 memory
+
+## 立即告警条件
+以下情况必须立即通知用户：
+- 发布前关键审批门存在遗漏风险
+- 已安排的内容发布存在明显漏发或关键素材缺失风险
+- 发现会影响公众号正常运营的高优先级异常
+
+## 输出规则
+- 无异常：回复 `HEARTBEAT_OK`
+- 普通事项：简短提醒待推进项、影响和建议动作
+- 严重异常：直接告警，并优先说明发布风险或审批风险
