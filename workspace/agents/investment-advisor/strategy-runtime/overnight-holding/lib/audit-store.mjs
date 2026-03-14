@@ -19,6 +19,7 @@ function createAuditDay(tradingDate) {
     candidatePool: [],
     ruleEngineResult: null,
     llmDecisionHistory: [],
+    riskReviewHistory: [],
     portfolioDecisionHistory: [],
     executionLog: [],
     positionSnapshots: [],
@@ -121,6 +122,13 @@ export function createAuditStore({ workspaceRoot }) {
       auditDay.llmDecisionHistory.push(createRecordedEntry({
         phase,
         ...payload.llmDecisionJson
+      }));
+    }
+
+    if (payload.riskReview) {
+      auditDay.riskReviewHistory.push(createRecordedEntry({
+        phase,
+        ...payload.riskReview
       }));
     }
 

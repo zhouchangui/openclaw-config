@@ -63,8 +63,9 @@
 
 - `lib/build-selection-package.mjs`：选股总编排
 - `lib/live-selection-inputs.mjs`：选股输入解析与 live provider 调度
+- `lib/technical-prefilter.mjs`：全市场技术预筛与候选上限控制
 - `lib/market-regime.mjs`：市场可交易门槛判断
-- `lib/score-candidates.mjs`：候选股评分
+- `lib/risk-veto-review.mjs`：最终执行前风控否决 / 询问 / 缩减判断
 - `lib/portfolio.mjs`：资金约束、虚拟成交、状态变更
 - `lib/sell-decision.mjs`：卖出复盘规则引擎
 - `lib/agent-decision.mjs`：agent 提示词与 fallback 包装
@@ -105,8 +106,9 @@
 
 1. `tushare`
 2. `akshare`
+3. `web`
 
-只有当 `tushare` 出现以下情况时才允许降级到 `akshare`：
+只有当前一个 provider 出现以下情况时才允许继续降级：
 
 - 请求报错
 - 请求超时
@@ -126,17 +128,13 @@
 - `lib/live-selection-inputs.mjs`
 - `python/build_live_selection_inputs.py`
 
-当前默认研究股票池是：
+当前 live provider 路径会优先走：
 
-- `300750`
-- `002594`
-- `601991`
-- `600121`
-- `600519`
+- `tushare`
+- `akshare`
+- `web`
 
-可以通过环境变量覆盖：
-
-- `INVESTMENT_SELECTION_SYMBOLS=300750,002594,...`
+输入范围为 **全市场快照 + 隔夜持股技术预筛**，不再依赖固定股票篮子。预筛阶段会剔除 ST / 停牌 / 无效行，并在进入 LLM 前只保留最多 50 个技术候选。
 
 相关环境变量包括：
 
@@ -153,7 +151,8 @@ provider 的输出分成两部分：
 其中：
 
 - `marketSnapshot` 用于市场是否可交易的判断
-- `candidateSnapshot.candidates[]` 用于候选评分和后续的虚拟买入分配
+- `candidateSnapshot.candidates[]` 是技术预筛后的候选池，最多保留 50 个
+- `prefilterSummary` 记录全市场预筛范围、过滤规则、原始市场规模与技术候选数
 
 ### 4.3 市场门槛（market gate）
 
@@ -180,24 +179,31 @@ provider 的输出分成两部分：
 - runtime 状态切为暂停
 - 不会生成新的虚拟买入
 
-### 4.4 候选评分
+### 4.4 技术预筛、LLM 精筛与最终风控
 
-评分逻辑在 `lib/score-candidates.mjs`。
+当前 `buy` 主链已经简化为：
 
-支持两种变体：
+1. 解析输入并获取全市场 live / file 数据
+2. 运行 `technical-prefilter`
+3. 在最多 `50` 个技术候选内交给 LLM 做最终取舍
+4. 运行 `risk-veto-review`
+5. 仅在最终风控放行时才写入虚拟买入和状态
 
-- `leader`：更偏板块辨识度、题材共振
-- `midcore`：更偏流动性、趋势完整性、兑现性
+其中：
 
-每个候选都会输出：
+- `candidatePool` 直接来自技术预筛结果，不再由旧的二次评分引擎驱动执行
+- `selectedCandidates.leader / midcore` 仍会保留，但它们只是展示视图，不再决定真实执行路径
+- `riskReview.decision` 目前支持：
+  - `allow`
+  - `reduce`
+  - `ask_user_first`
+  - `veto`
 
-- `totalScore`
-- `rejectReason`
-- `selectionReasons`
-- `breakdown`
+当 `riskReview.decision !== allow` 时：
 
-之后 runtime 会把 leader 和 midcore 的评分结果合并成统一 `candidatePool`，
-同一只股票若同时出现，保留得分更高的那一条。
+- 不执行新的虚拟买入
+- `executionLog` 会显式记录 `blocked_by_risk_review`
+- 审计档会写入 `riskReviewHistory`
 
 ### 4.5 资金与仓位约束
 

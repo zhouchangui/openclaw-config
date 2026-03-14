@@ -3,7 +3,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { evaluateMarketRegime } from './market-regime.mjs';
-import { scoreCandidates } from './score-candidates.mjs';
 import { createStateStore } from './state-store.mjs';
 import {
   applyBuyToState,
@@ -15,6 +14,8 @@ import {
 import { createAuditStore } from './audit-store.mjs';
 import { resolveSelectionLlmDecision } from './agent-decision.mjs';
 import { resolveSelectionInputs } from './live-selection-inputs.mjs';
+import { reviewFinalRiskVeto } from './risk-veto-review.mjs';
+import { buildTechnicalScore } from './technical-prefilter.mjs';
 
 function resolveRuntimeRoot() {
   return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -44,27 +45,95 @@ function resolveVariants(variant) {
   return variant === 'both' ? ['leader', 'midcore'] : [variant];
 }
 
-function buildCandidatePool(selectedCandidates) {
-  const bySymbol = new Map();
-
-  for (const [variant, ranked] of Object.entries(selectedCandidates)) {
-    for (const candidate of ranked) {
-      const entry = {
-        ...candidate,
-        pickedVariant: variant,
-        passedRules: !candidate.rejectReason
-      };
-      const existing = bySymbol.get(candidate.symbol);
-      if (!existing || Number(entry.totalScore || 0) > Number(existing.totalScore || 0)) {
-        bySymbol.set(candidate.symbol, entry);
-      }
-    }
-  }
-
-  return Array.from(bySymbol.values());
+function clampScore(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return 0;
+  return Math.max(0, Math.min(100, numeric));
 }
 
-function buildSummary({ tradingDate, marketGate, virtualBuys, status, llmDecisionJson }) {
+function buildProfileScore(candidate, variant) {
+  if (variant === 'leader') {
+    return Math.round(
+      (clampScore(candidate.boardLeadership) * 0.55) +
+      (clampScore(candidate.themeResonance) * 0.45)
+    );
+  }
+
+  return Math.round(
+    (clampScore(candidate.liquidityStability) * 0.52) +
+    (clampScore(candidate.trendIntegrity) * 0.48)
+  );
+}
+
+function resolveDominantVariant(candidate) {
+  return buildProfileScore(candidate, 'leader') >= buildProfileScore(candidate, 'midcore')
+    ? 'leader'
+    : 'midcore';
+}
+
+function buildCandidateSelectionReasons(candidate, variant) {
+  const profileReason = variant === 'leader'
+    ? '龙头辨识度更强'
+    : '趋势与流动性更稳';
+
+  return [
+    '技术预筛通过',
+    profileReason,
+    '等待 LLM 结合上下文做最终取舍'
+  ];
+}
+
+function buildCandidatePool(candidateSnapshot) {
+  return (candidateSnapshot.candidates || []).map((candidate) => {
+    const pickedVariant = resolveDominantVariant(candidate);
+    const totalScore = Math.round(buildTechnicalScore(candidate));
+
+    return {
+      symbol: candidate.symbol,
+      name: candidate.name,
+      variant: pickedVariant,
+      pickedVariant,
+      totalScore,
+      rejectReason: null,
+      passedRules: true,
+      selectionReasons: buildCandidateSelectionReasons(candidate, pickedVariant),
+      breakdown: {
+        technicalScore: totalScore,
+        leaderProfileScore: buildProfileScore(candidate, 'leader'),
+        midcoreProfileScore: buildProfileScore(candidate, 'midcore'),
+        boardLeadership: clampScore(candidate.boardLeadership),
+        themeResonance: clampScore(candidate.themeResonance),
+        liquidityStability: clampScore(candidate.liquidityStability),
+        trendIntegrity: clampScore(candidate.trendIntegrity),
+        afternoonSupport: clampScore(candidate.afternoonSupport),
+        nextDayRealizability: clampScore(candidate.nextDayRealizability)
+      },
+      rawData: candidate.raw || null
+    };
+  });
+}
+
+function buildSelectedCandidateViews(candidatePool, variants) {
+  return Object.fromEntries(variants.map((variant) => [
+    variant,
+    candidatePool.map((candidate) => ({
+      symbol: candidate.symbol,
+      name: candidate.name,
+      variant,
+      pickedVariant: candidate.pickedVariant,
+      totalScore: candidate.totalScore,
+      rejectReason: null,
+      selectionReasons: buildCandidateSelectionReasons(candidate, candidate.pickedVariant),
+      breakdown: {
+        technicalScore: candidate.breakdown.technicalScore,
+        leaderProfileScore: candidate.breakdown.leaderProfileScore,
+        midcoreProfileScore: candidate.breakdown.midcoreProfileScore
+      }
+    }))
+  ]));
+}
+
+function buildSummary({ tradingDate, marketGate, virtualBuys, status, llmDecisionJson, riskReview }) {
   const title = `隔日持股 ${tradingDate} 操作报告`;
 
   if (!status.enabled) {
@@ -91,6 +160,20 @@ function buildSummary({ tradingDate, marketGate, virtualBuys, status, llmDecisio
     ].join('\n');
   }
 
+  if (riskReview && llmDecisionJson.action === 'buy' && riskReview.decision !== 'allow') {
+    const decisionCopy = {
+      veto: '最终风控否决，本次仅保留候选预览，不执行虚拟买入。',
+      ask_user_first: '最终风控要求先征求用户确认，本次暂不执行虚拟买入。',
+      reduce: '最终风控要求缩减仓位后再执行，本次暂不直接落地虚拟买入。'
+    };
+
+    return [
+      title,
+      `结论：${decisionCopy[riskReview.decision] || '最终风控阻止本次执行。'}`,
+      `风险提示：${riskReview.reason}`
+    ].join('\n');
+  }
+
   const symbols = virtualBuys.map((item) => `${item.symbol}(${item.pickedVariant})`).join('、') || '无';
 
   return [
@@ -100,16 +183,40 @@ function buildSummary({ tradingDate, marketGate, virtualBuys, status, llmDecisio
   ].join('\n');
 }
 
-function buildMarkdown({ tradingDate, marketGate, selectedCandidates, virtualBuys, status, llmDecisionJson, portfolioDecision }) {
+function buildMarkdown({
+  tradingDate,
+  marketGate,
+  selectedCandidates,
+  virtualBuys,
+  status,
+  llmDecisionJson,
+  portfolioDecision,
+  prefilterSummary,
+  riskReview
+}) {
   const lines = [
     `# 隔日持股 ${tradingDate} 选股记录`,
     '',
     `- 主线延续分：${marketGate.sectorContinuityScore}`,
     `- 可交易：${marketGate.tradable ? '是' : '否'}`,
     `- 策略启用：${status.enabled ? '是' : '否'}`,
-    `- 当日可动用资金：${portfolioDecision.actualDeployAmount}`,
-    ''
+    `- 当日可动用资金：${portfolioDecision.actualDeployAmount}`
   ];
+
+  if (prefilterSummary) {
+    lines.push(`- 技术预筛范围：${prefilterSummary.scope}`);
+    lines.push(`- 技术候选数：${prefilterSummary.technicalCandidatesCount}`);
+  }
+
+  lines.push(
+    ''
+  );
+
+  if (riskReview) {
+    lines.push(`- 最终风控决策：${riskReview.decision}`);
+    lines.push(`- 最终风控说明：${riskReview.reason}`);
+    lines.push('');
+  }
 
   if (virtualBuys.length > 0) {
     lines.push('## 虚拟买入');
@@ -164,6 +271,10 @@ export async function buildSelectionPackage({
   dryRun = false
 }) {
   const resolvedWorkspaceRoot = workspaceRoot;
+  const store = createStateStore({ workspaceRoot: resolvedWorkspaceRoot });
+  const auditStore = createAuditStore({ workspaceRoot: resolvedWorkspaceRoot });
+  const state = await store.loadState();
+  ensurePortfolioState(state);
   const inputResolution = await resolveSelectionInputs({
     tradingDate,
     dryRun,
@@ -174,19 +285,9 @@ export async function buildSelectionPackage({
   const candidateSnapshot = inputResolution.candidateSnapshot;
   const externalLlmDecision = llmDecisionFile ? await readJson(llmDecisionFile) : null;
   const marketGate = evaluateMarketRegime(marketSnapshot);
-  const store = createStateStore({ workspaceRoot: resolvedWorkspaceRoot });
-  const auditStore = createAuditStore({ workspaceRoot: resolvedWorkspaceRoot });
-  const state = await store.loadState();
-  ensurePortfolioState(state);
-  const selectedCandidates = {};
-
-  for (const item of resolveVariants(variant)) {
-    selectedCandidates[item] = scoreCandidates({
-      variant: item,
-      sectorContinuityScore: marketGate.sectorContinuityScore,
-      candidates: candidateSnapshot.candidates
-    }).ranked;
-  }
+  const variants = resolveVariants(variant);
+  const candidatePool = buildCandidatePool(candidateSnapshot);
+  const selectedCandidates = buildSelectedCandidateViews(candidatePool, variants);
 
   if (!marketGate.tradable) {
     await store.recordStopEvent({
@@ -205,10 +306,6 @@ export async function buildSelectionPackage({
   }
 
   const status = refreshedState.status;
-  const candidatePool = buildCandidatePool(selectedCandidates).map((item) => ({
-    ...item,
-    rawData: candidateSnapshot.candidates.find((candidate) => candidate.symbol === item.symbol)?.raw || null
-  }));
   const portfolioDecision = buildPortfolioDecision({
     state: refreshedState,
     selectedCount: candidatePool.filter((item) => item.passedRules).length
@@ -247,9 +344,23 @@ export async function buildSelectionPackage({
       candidatePool
     })
     : [];
+  const riskReview = reviewFinalRiskVeto({
+    tradingDate,
+    marketSnapshot,
+    marketGate,
+    status,
+    llmDecisionJson,
+    candidatePool,
+    virtualBuys,
+    portfolioDecision
+  });
   const executionLog = [];
+  const executionBlockedByRiskReview = marketGate.tradable
+    && status.enabled
+    && llmDecisionJson.action === 'buy'
+    && riskReview.decision !== 'allow';
 
-  if (marketGate.tradable && status.enabled && llmDecisionJson.action === 'buy') {
+  if (marketGate.tradable && status.enabled && llmDecisionJson.action === 'buy' && !executionBlockedByRiskReview) {
     for (const virtualBuy of virtualBuys) {
       executionLog.push(applyBuyToState({
         state: refreshedState,
@@ -260,6 +371,12 @@ export async function buildSelectionPackage({
         }
       }));
     }
+  } else if (executionBlockedByRiskReview) {
+    executionLog.push({
+      type: 'no_buy',
+      reason: 'blocked_by_risk_review',
+      riskDecision: riskReview.decision
+    });
   } else if (!marketGate.tradable) {
     executionLog.push({
       type: 'no_buy',
@@ -272,27 +389,30 @@ export async function buildSelectionPackage({
     });
   }
 
-  refreshedState.selectionJournal.push({
-    tradingDate,
-    variant,
-    tradable: marketGate.tradable,
-    selectedCount: virtualBuys.length,
-    sectorContinuityScore: marketGate.sectorContinuityScore
-  });
-  await store.saveState(refreshedState);
-  await store.appendJournalEvent(tradingDate, 'selection', {
-    type: 'selection_completed',
-    variant,
-    tradable: marketGate.tradable,
-    selectedCount: virtualBuys.length
-  });
+  if (!executionBlockedByRiskReview) {
+    refreshedState.selectionJournal.push({
+      tradingDate,
+      variant,
+      tradable: marketGate.tradable,
+      selectedCount: virtualBuys.length,
+      sectorContinuityScore: marketGate.sectorContinuityScore
+    });
+    await store.saveState(refreshedState);
+    await store.appendJournalEvent(tradingDate, 'selection', {
+      type: 'selection_completed',
+      variant,
+      tradable: marketGate.tradable,
+      selectedCount: virtualBuys.length
+    });
+  }
 
   const messageSummary = buildSummary({
     tradingDate,
     marketGate,
     virtualBuys,
     status: refreshedState.status,
-    llmDecisionJson
+    llmDecisionJson,
+    riskReview
   });
   const { dataPath, markdownPath } = buildSelectionPaths(resolvedWorkspaceRoot, tradingDate);
   const payload = {
@@ -306,12 +426,14 @@ export async function buildSelectionPackage({
     virtualBuys,
     llmDecisionJson,
     portfolioDecision,
+    riskReview,
     executionLog,
     messageSummary,
     dataPath,
     markdownPath,
     dataSourceMode: inputResolution.dataSourceMode,
-    inputDataSource: inputResolution.inputDataSource
+    inputDataSource: inputResolution.inputDataSource,
+    prefilterSummary: inputResolution.prefilterSummary
   };
 
   await writeText(dataPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -322,7 +444,9 @@ export async function buildSelectionPackage({
     virtualBuys,
     status: refreshedState.status,
     llmDecisionJson,
-    portfolioDecision
+    portfolioDecision,
+    prefilterSummary: inputResolution.prefilterSummary,
+    riskReview
   }));
 
   await auditStore.recordSelectionAudit({
@@ -341,6 +465,7 @@ export async function buildSelectionPackage({
     },
     llmDecisionJson,
     portfolioDecision,
+    riskReview,
     executionLog,
     positionSnapshots: {
       beforeMarket: state.currentPositions,
@@ -361,6 +486,7 @@ export async function buildSelectionPackage({
       llmAgentSessionId: llmResolution.agentMeta?.sessionId || null,
       llmAgentModel: llmResolution.agentMeta?.model || null,
       llmAgentProvider: llmResolution.agentMeta?.provider || null,
+      prefilterSummary: inputResolution.prefilterSummary || null,
       runtimeVersion: 'overnight-holding-v1'
     },
     exceptionsAndFallbacks: [

@@ -4,8 +4,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
+import { applyTechnicalPrefilter } from './technical-prefilter.mjs';
+
 const execFile = promisify(execFileCallback);
-const DEFAULT_SELECTION_SYMBOLS = ['300750', '002594', '601991', '600121', '600519'];
 
 function resolveRuntimeRoot() {
   return path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -19,14 +20,6 @@ function summarizeError(error) {
   return error instanceof Error ? error.message : String(error);
 }
 
-function resolveSelectionSymbols() {
-  const configured = String(process.env.INVESTMENT_SELECTION_SYMBOLS || '')
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-  return configured.length > 0 ? configured : DEFAULT_SELECTION_SYMBOLS;
-}
-
 function validateProviderPayload(payload, provider) {
   const marketSnapshot = payload?.marketSnapshot;
   const candidateSnapshot = payload?.candidateSnapshot;
@@ -36,7 +29,20 @@ function validateProviderPayload(payload, provider) {
   if (!candidateSnapshot || !Array.isArray(candidateSnapshot.candidates) || candidateSnapshot.candidates.length === 0) {
     throw new Error(`${provider} returned empty candidates`);
   }
-  return { marketSnapshot, candidateSnapshot };
+  const normalized = applyTechnicalPrefilter({
+    candidateSnapshot,
+    prefilterSummary: payload?.prefilterSummary,
+    scope: 'full-market'
+  });
+  return {
+    marketSnapshot,
+    candidateSnapshot: normalized.candidateSnapshot,
+    prefilterSummary: normalized.prefilterSummary,
+    providerMeta: payload?.providerMeta || null,
+    exceptionsAndFallbacks: Array.isArray(payload?.exceptionsAndFallbacks)
+      ? payload.exceptionsAndFallbacks
+      : []
+  };
 }
 
 async function loadProviderFixture(filePath, provider) {
@@ -46,7 +52,7 @@ async function loadProviderFixture(filePath, provider) {
   };
 }
 
-async function loadProviderFromPython({ provider, tradingDate, symbols }) {
+async function loadProviderFromPython({ provider, tradingDate }) {
   const pythonBin = process.env.INVESTMENT_SELECTION_PYTHON || 'python3';
   const scriptPath = path.join(resolveRuntimeRoot(), 'python', 'build_live_selection_inputs.py');
   const timeoutMs = Number(process.env.INVESTMENT_SELECTION_PROVIDER_TIMEOUT_MS || 120000);
@@ -55,8 +61,7 @@ async function loadProviderFromPython({ provider, tradingDate, symbols }) {
     [
       scriptPath,
       '--provider', provider,
-      '--trading-date', tradingDate,
-      '--symbols', symbols.join(',')
+      '--trading-date', tradingDate
     ],
     {
       env: process.env,
@@ -69,15 +74,17 @@ async function loadProviderFromPython({ provider, tradingDate, symbols }) {
   };
 }
 
-async function fetchProviderSelectionInputs({ provider, tradingDate, symbols }) {
-  const fixtureEnvName = provider === 'tushare'
-    ? 'INVESTMENT_SELECTION_TUSHARE_FIXTURE_FILE'
-    : 'INVESTMENT_SELECTION_AKSHARE_FIXTURE_FILE';
+async function fetchProviderSelectionInputs({ provider, tradingDate }) {
+  const fixtureEnvName = {
+    tushare: 'INVESTMENT_SELECTION_TUSHARE_FIXTURE_FILE',
+    akshare: 'INVESTMENT_SELECTION_AKSHARE_FIXTURE_FILE',
+    web: 'INVESTMENT_SELECTION_WEB_FIXTURE_FILE'
+  }[provider];
   const fixtureFile = process.env[fixtureEnvName];
   if (fixtureFile) {
     return loadProviderFixture(fixtureFile, provider);
   }
-  return loadProviderFromPython({ provider, tradingDate, symbols });
+  return loadProviderFromPython({ provider, tradingDate });
 }
 
 export async function resolveSelectionInputs({
@@ -87,9 +94,14 @@ export async function resolveSelectionInputs({
   candidatesFile
 }) {
   if (dryRun) {
+    const normalized = applyTechnicalPrefilter({
+      candidateSnapshot: await readJson(candidatesFile),
+      scope: 'full-market'
+    });
     return {
       marketSnapshot: await readJson(marketFile),
-      candidateSnapshot: await readJson(candidatesFile),
+      candidateSnapshot: normalized.candidateSnapshot,
+      prefilterSummary: normalized.prefilterSummary,
       dataSourceMode: 'fixtures',
       inputDataSource: {
         provider: 'files',
@@ -99,16 +111,24 @@ export async function resolveSelectionInputs({
         marketFile,
         candidatesFile,
         inputProvider: 'files',
-        inputMode: 'fixtures'
+        inputMode: 'fixtures',
+        selectionScope: normalized.prefilterSummary.scope,
+        technicalCandidatesCount: normalized.prefilterSummary.technicalCandidatesCount,
+        prefilterFilters: normalized.prefilterSummary.filters
       },
       exceptionsAndFallbacks: []
     };
   }
 
   if (marketFile && candidatesFile) {
+    const normalized = applyTechnicalPrefilter({
+      candidateSnapshot: await readJson(candidatesFile),
+      scope: 'full-market'
+    });
     return {
       marketSnapshot: await readJson(marketFile),
-      candidateSnapshot: await readJson(candidatesFile),
+      candidateSnapshot: normalized.candidateSnapshot,
+      prefilterSummary: normalized.prefilterSummary,
       dataSourceMode: 'external-files',
       inputDataSource: {
         provider: 'files',
@@ -118,18 +138,32 @@ export async function resolveSelectionInputs({
         marketFile,
         candidatesFile,
         inputProvider: 'files',
-        inputMode: 'external-files'
+        inputMode: 'external-files',
+        selectionScope: normalized.prefilterSummary.scope,
+        technicalCandidatesCount: normalized.prefilterSummary.technicalCandidatesCount,
+        prefilterFilters: normalized.prefilterSummary.filters
       },
       exceptionsAndFallbacks: []
     };
   }
 
-  const symbols = resolveSelectionSymbols();
   const attempts = [];
-  for (const provider of ['tushare', 'akshare']) {
+  for (const provider of ['tushare', 'akshare', 'web']) {
     try {
-      const resolved = await fetchProviderSelectionInputs({ provider, tradingDate, symbols });
+      const resolved = await fetchProviderSelectionInputs({ provider, tradingDate });
       const fallbackFrom = attempts.length > 0 ? attempts.at(-1).provider : null;
+      const symbols = resolved.candidateSnapshot.candidates.map((candidate) => candidate.symbol);
+      const exceptionsAndFallbacks = [
+        ...(fallbackFrom
+          ? [{
+            type: 'selection_input_provider_fallback',
+            from: fallbackFrom,
+            to: provider,
+            reason: attempts.at(-1).reason
+          }]
+          : []),
+        ...((resolved.exceptionsAndFallbacks || []).map((item) => ({ ...item, provider })))
+      ];
       return {
         ...resolved,
         dataSourceMode: 'live-provider',
@@ -137,6 +171,7 @@ export async function resolveSelectionInputs({
           provider,
           mode: 'live-provider',
           fallbackFrom,
+          scope: resolved.prefilterSummary?.scope || 'full-market',
           symbols
         },
         dataLineage: {
@@ -145,17 +180,15 @@ export async function resolveSelectionInputs({
           inputProvider: provider,
           inputMode: 'live-provider',
           fallbackFrom,
+          selectionScope: resolved.prefilterSummary?.scope || 'full-market',
           selectionSymbols: symbols,
-          providerAttempts: attempts
+          providerAttempts: attempts,
+          technicalCandidatesCount: resolved.prefilterSummary?.technicalCandidatesCount ?? symbols.length,
+          prefilterFilters: resolved.prefilterSummary?.filters || [],
+          universeCount: resolved.prefilterSummary?.universeCount ?? symbols.length,
+          providerMeta: resolved.providerMeta || null
         },
-        exceptionsAndFallbacks: fallbackFrom
-          ? [{
-            type: 'selection_input_provider_fallback',
-            from: fallbackFrom,
-            to: provider,
-            reason: attempts.at(-1).reason
-          }]
-          : []
+        exceptionsAndFallbacks
       };
     } catch (error) {
       attempts.push({

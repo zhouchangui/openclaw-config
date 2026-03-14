@@ -60,15 +60,23 @@ try {
   assert.equal(fallbackResult.ok, true);
   assert.equal(fallbackResult.dataSourceMode, 'live-provider');
   assert.equal(fallbackResult.inputDataSource.provider, 'akshare');
+  assert.equal(fallbackResult.inputDataSource.mode, 'live-provider');
   assert.equal(fallbackResult.inputDataSource.fallbackFrom, 'tushare');
+  assert.ok(Array.isArray(fallbackResult.inputDataSource.symbols));
+  assert.ok(fallbackResult.inputDataSource.symbols.length > 0);
 
   const fallbackAudit = JSON.parse(
     await readFile(path.join(fallbackRoot, 'data', 'overnight-holding', 'audit', '2026-03-12.json'), 'utf8')
   );
   assert.equal(fallbackAudit.dataLineage.at(-1).inputProvider, 'akshare');
+  assert.equal(fallbackAudit.dataLineage.at(-1).fallbackFrom, 'tushare');
+  assert.ok(Array.isArray(fallbackAudit.dataLineage.at(-1).providerAttempts));
+  assert.ok(fallbackAudit.dataLineage.at(-1).providerAttempts.length > 0);
   assert.equal(
-    fallbackAudit.exceptionsAndFallbacks.at(-1).type,
-    'selection_input_provider_fallback'
+    fallbackAudit.exceptionsAndFallbacks.some(
+      (item) => item.type === 'selection_input_provider_fallback'
+    ),
+    true
   );
 
   console.log('selection-live-provider smoke ok');
