@@ -62,3 +62,10 @@ node_modules/
 skills/report/config.json
 
 # 以后如果需要特定的 JSON 配置也可以加到这里
+
+# 5. Local working notes and runtime caches
+/feishu/
+/workspace/agents/dingding-assistant/todo/
+/workspace/agents/wechat-lobster/todos/
+/workspace/agents/investment-advisor/.learnings/
+/workspace/agents/investment-advisor/notes/
